@@ -240,18 +240,26 @@
       updateUI();
     };
 
-    button.onclick = (event) => {
-      let increment = 1;
-      if (products[0].level > 1) {
-        increment += products[0].level - 1;
-      }
+    // Button click handling for desktop and mobile
+    button.addEventListener('mousedown', handleButtonPress);
+    button.addEventListener('mouseup', handleButtonRelease);
+    button.addEventListener('touchstart', handleButtonPress);
+    button.addEventListener('touchend', handleButtonRelease);
+
+    function handleButtonPress(event) {
+      button.style.transform = 'scale(0.95)';
+      const increment = products[0].level > 1 ? products[0].level : 1;
       counter += increment;
       coins += increment;
       checkLevelUp();
       saveGame();
       updateUI();
-      showCoinAnimation(event.clientX, event.clientY);
-    };
+      showCoinAnimation(event.touches ? event.touches[0].clientX : event.clientX, event.touches ? event.touches[0].clientY : event.clientY);
+    }
+
+    function handleButtonRelease() {
+      button.style.transform = 'scale(1)';
+    }
 
     soundControlButton.onclick = () => {
       if (gameSound.paused) {
