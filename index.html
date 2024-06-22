@@ -108,7 +108,7 @@
       pointer-events: none;
       display: none;
     }
-    #soundControl {
+    #playSoundButton {
       position: absolute;
       bottom: 2vw;
       right: 2vw;
@@ -181,7 +181,7 @@
     <span>Hau Ihn</span>
   </div>
   <div id="coin-animation"></div>
-  <button id="soundControl">Sound Aus</button>
+  <button id="playSoundButton" onclick="playSound()">Play Sound</button>
   
   <div id="sideMenu">
     <a href="#" id="shopButton">Shop</a>
@@ -220,20 +220,17 @@
     const scoreElem = document.getElementById('score');
     const coinsElem = document.getElementById('coins');
     const levelElem = document.getElementById('level');
-    const soundControlButton = document.getElementById('soundControl');
+    const playSoundButton = document.getElementById('playSoundButton');
     const menuButton = document.getElementById('menuButton');
     const sideMenu = document.getElementById('sideMenu');
     const coinAnimation = document.getElementById('coin-animation');
 
-    const gameSound = new Audio('https://drive.google.com/uc?export=download&id=10JF1HqoHr8B7rsGnrCs9zl5w_UAnCBkW'); // Replace with your actual file ID
-    gameSound.loop = true;
+    function playSound() {
+        var audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/iv1rjs6mqk2qvhk8d9d30/Bob-Marley-Buffalo-soldier.mp3?rlkey=4eucz565t13prewvr3wcku1o4&st=7tfuhi47&dl=0');
+        audio.play();
+    }
 
     window.onload = function() {
-      gameSound.play().catch(error => {
-        console.log('Error playing sound:', error);
-        soundControlButton.innerText = 'Sound An';
-      });
-
       products.forEach((product, index) => {
         if (product.autoClick && !product.autoClickId) {
           product.autoClickId = setInterval(() => {
@@ -267,16 +264,6 @@
     function handleButtonRelease() {
       button.style.transform = 'scale(1)';
     }
-
-    soundControlButton.onclick = () => {
-      if (gameSound.paused) {
-        gameSound.play();
-        soundControlButton.innerText = 'Sound Aus';
-      } else {
-        gameSound.pause();
-        soundControlButton.innerText = 'Sound An';
-      }
-    };
 
     menuButton.onclick = () => {
       if (sideMenu.style.left === '0px') {
