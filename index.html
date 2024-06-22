@@ -51,8 +51,11 @@
       font-size: 6vw; /* Responsive font size */
       font-weight: bold;
       color: green;
-      margin-top: 20vh; /* Positioned a quarter above the middle */
-      margin-bottom: -10vh; /* Adjusted for better alignment */
+      margin-top: 25vh; /* Positioned a quarter above the middle */
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      display: inline-block;
     }
     #button {
       width: 40vw; /* Doubled size */
@@ -79,6 +82,19 @@
       color: rgb(24, 21, 21);
       z-index: 1;
     }
+    #soundControl {
+      position: absolute;
+      bottom: 2vw;
+      right: 2vw;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+    }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -93,6 +109,7 @@
     <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Hau Ihn">
     <span>Hau Ihn</span>
   </div>
+  <button id="soundControl">Sound Aus</button>
   <script>
     // Telegram Web App integration
     Telegram.WebApp.ready();
@@ -113,60 +130,14 @@
 
     const levelThresholds = [10, 50, 100, 200, 400]; // Thresholds for leveling up
 
-    document.getElementById('button').onclick = () => {
-      let increment = 1;
-      if (products[0].level > 1) {
-        increment += products[0].level - 1;
-      }
-      counter += increment;
-      coins += increment;
-      checkLevelUp();
-      saveGame();
-      updateUI();
-    };
+    const button = document.getElementById('button');
+    const scoreElem = document.getElementById('score');
+    const coinsElem = document.getElementById('coins');
+    const levelElem = document.getElementById('level');
+    const soundControlButton = document.getElementById('soundControl');
 
-    function checkLevelUp() {
-      if (level < levelThresholds.length && counter >= levelThresholds[level - 1]) {
-        level++;
-        alert('Level Up! You are now at level ' + level);
-      }
-    }
-
-    function updateUI() {
-      document.getElementById('score').innerText = counter;
-      document.getElementById('coins').innerText = 'Coins: ' + coins;
-      document.getElementById('level').innerText = 'Level: ' + level;
-      products.forEach((product, index) => {
-        const productElem = document.getElementById(`product${index + 1}`);
-        productElem.querySelector('button').innerText = `Lvl. ${product.level} | ${product.cost} Coins`;
-      });
-    }
-
-    function upgradeProduct(productIndex) {
-      const product = products[productIndex - 1];
-      if (coins >= product.cost) {
-        coins -= product.cost;
-        product.level++;
-        product.cost = Math.round(product.cost * 1.5);
-        if (product.autoClick && !product.autoClickId) {
-          product.autoClickId = setInterval(() => {
-            counter += 1;
-            coins += 1;
-            saveGame();
-            updateUI();
-          }, product.interval);
-        }
-        saveGame();
-        updateUI();
-      }
-    }
-
-    function saveGame() {
-      localStorage.setItem('counter', counter);
-      localStorage.setItem('coins', coins);
-      localStorage.setItem('level', level);
-      localStorage.setItem('products', JSON.stringify(products));
-    }
+    const gameSound = new Audio('https://www.example.com/sound.mp3'); // Replace with the actual sound file URL
+    gameSound.loop = true;
 
     window.onload = function() {
       products.forEach((product, index) => {
@@ -180,7 +151,56 @@
         }
       });
       updateUI();
+      gameSound.play();
     };
+
+    button.onclick = () => {
+      let increment = 1;
+      if (products[0].level > 1) {
+        increment += products[0].level - 1;
+      }
+      counter += increment;
+      coins += increment;
+      checkLevelUp();
+      saveGame();
+      updateUI();
+    };
+
+    soundControlButton.onclick = () => {
+      if (gameSound.paused) {
+        gameSound.play();
+        soundControlButton.innerText = 'Sound Aus';
+      } else {
+        gameSound.pause();
+        soundControlButton.innerText = 'Sound An';
+      }
+    };
+
+    function checkLevelUp() {
+      if (level < levelThresholds.length && counter >= levelThresholds[level - 1]) {
+        level++;
+        alert('Level Up! You are now at level ' + level);
+      }
+    }
+
+    function updateUI() {
+      scoreElem.innerText = counter;
+      coinsElem.innerText = 'Coins: ' + coins;
+      levelElem.innerText = 'Level: ' + level;
+      products.forEach((product, index) => {
+        const productElem = document.getElementById(`product${index + 1}`);
+        if (productElem) {
+          productElem.querySelector('button').innerText = `Lvl. ${product.level} | ${product.cost} Coins`;
+        }
+      });
+    }
+
+    function saveGame() {
+      localStorage.setItem('counter', counter);
+      localStorage.setItem('coins', coins);
+      localStorage.setItem('level', level);
+      localStorage.setItem('products', JSON.stringify(products));
+    }
 
     updateUI();
   </script>
