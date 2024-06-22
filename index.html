@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
+    @keyframes coinAnimation {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(0.5);
+      }
+    }
+
     body {
       background-image: url('https://cdn.wallpapersafari.com/79/31/E547v1.jpg');
       background-size: cover;
@@ -70,6 +81,7 @@
       align-items: center;
       justify-content: center;
       margin: auto;
+      transition: transform 0.1s;
     }
     #button img {
       width: 100%;
@@ -82,6 +94,19 @@
       font-weight: bold;
       color: rgb(24, 21, 21);
       z-index: 1;
+    }
+    #button:active {
+      transform: scale(0.95);
+    }
+    #coin-animation {
+      position: absolute;
+      width: 10vw;
+      height: 10vw;
+      background-image: url('https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png');
+      background-size: contain;
+      animation: coinAnimation 1s ease-out;
+      pointer-events: none;
+      display: none;
     }
     #soundControl {
       position: absolute;
@@ -155,6 +180,7 @@
     <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Hau Ihn">
     <span>Hau Ihn</span>
   </div>
+  <div id="coin-animation"></div>
   <button id="soundControl">Sound Aus</button>
   
   <div id="sideMenu">
@@ -190,6 +216,7 @@
     const soundControlButton = document.getElementById('soundControl');
     const menuButton = document.getElementById('menuButton');
     const sideMenu = document.getElementById('sideMenu');
+    const coinAnimation = document.getElementById('coin-animation');
 
     const gameSound = new Audio('https://drive.google.com/uc?export=download&id=10JF1HqoHr8B7rsGnrCs9zl5w_UAnCBkW'); // Replace with your actual file ID
     gameSound.loop = true;
@@ -213,7 +240,7 @@
       updateUI();
     };
 
-    button.onclick = () => {
+    button.onclick = (event) => {
       let increment = 1;
       if (products[0].level > 1) {
         increment += products[0].level - 1;
@@ -223,6 +250,7 @@
       checkLevelUp();
       saveGame();
       updateUI();
+      showCoinAnimation(event.clientX, event.clientY);
     };
 
     soundControlButton.onclick = () => {
@@ -269,8 +297,20 @@
       localStorage.setItem('products', JSON.stringify(products));
     }
 
+    function showCoinAnimation(x, y) {
+      const clone = coinAnimation.cloneNode(true);
+      clone.style.left = `${x - 20}px`;
+      clone.style.top = `${y - 20}px`;
+      clone.style.display = 'block';
+      document.body.appendChild(clone);
+      clone.addEventListener('animationend', () => {
+        clone.remove();
+      });
+    }
+
     updateUI();
   </script>
 </body>
 </html>
+
 
