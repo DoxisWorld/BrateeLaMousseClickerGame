@@ -95,6 +95,19 @@
       color: black;
       cursor: pointer;
     }
+    #startGame {
+      position: absolute;
+      top: 2vw;
+      right: 2vw;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+    }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -109,7 +122,8 @@
     <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Hau Ihn">
     <span>Hau Ihn</span>
   </div>
-  <button id="soundControl">Sound Aus</button>
+  <button id="startGame">Start Game</button>
+  <button id="soundControl" style="display:none;">Sound Aus</button>
   <script>
     // Telegram Web App integration
     Telegram.WebApp.ready();
@@ -135,23 +149,15 @@
     const coinsElem = document.getElementById('coins');
     const levelElem = document.getElementById('level');
     const soundControlButton = document.getElementById('soundControl');
+    const startGameButton = document.getElementById('startGame');
 
-    const gameSound = new Audio('https://github.com/DoxisWorld/BrateeLaMousseClickerGame/blob/main/Bob%20Marley%20%20Buffalo%20soldier.mp3'); // Replace with the actual sound file URL
+    const gameSound = new Audio('https://www.dropbox.com/scl/fi/iv1rjs6mqk2qvhk8d9d30/Bob-Marley-Buffalo-soldier.mp3'); // Replace with the actual sound file URL
     gameSound.loop = true;
 
-    window.onload = function() {
-      products.forEach((product, index) => {
-        if (product.autoClick && !product.autoClickId) {
-          product.autoClickId = setInterval(() => {
-            counter += 1;
-            coins += 1;
-            saveGame();
-            updateUI();
-          }, product.interval);
-        }
-      });
-      updateUI();
+    startGameButton.onclick = function() {
       gameSound.play();
+      startGameButton.style.display = 'none';
+      soundControlButton.style.display = 'inline-block';
     };
 
     button.onclick = () => {
@@ -201,6 +207,20 @@
       localStorage.setItem('level', level);
       localStorage.setItem('products', JSON.stringify(products));
     }
+
+    window.onload = function() {
+      products.forEach((product, index) => {
+        if (product.autoClick && !product.autoClickId) {
+          product.autoClickId = setInterval(() => {
+            counter += 1;
+            coins += 1;
+            saveGame();
+            updateUI();
+          }, product.interval);
+        }
+      });
+      updateUI();
+    };
 
     updateUI();
   </script>
