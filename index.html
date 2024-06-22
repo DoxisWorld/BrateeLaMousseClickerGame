@@ -95,6 +95,44 @@
       color: black;
       cursor: pointer;
     }
+    #menuButton {
+      position: absolute;
+      top: 2vw;
+      left: 2vw;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+    }
+    #sideMenu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 250px;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+      transition: left 0.3s;
+      display: flex;
+      flex-direction: column;
+      padding-top: 5vw;
+    }
+    #sideMenu a {
+      padding: 1.5vw;
+      text-align: center;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      text-decoration: none;
+      margin-bottom: 1vw;
+    }
+    #sideMenu a:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -110,6 +148,14 @@
     <span>Hau Ihn</span>
   </div>
   <button id="soundControl">Sound Aus</button>
+  <button id="menuButton">Menü</button>
+  
+  <div id="sideMenu">
+    <a href="#" id="shopButton">Shop</a>
+    <a href="#" id="freeCoinsButton">Free Coins</a>
+    <a href="#" id="aboutButton">About</a>
+  </div>
+
   <script>
     // Telegram Web App integration
     Telegram.WebApp.ready();
@@ -135,6 +181,8 @@
     const coinsElem = document.getElementById('coins');
     const levelElem = document.getElementById('level');
     const soundControlButton = document.getElementById('soundControl');
+    const menuButton = document.getElementById('menuButton');
+    const sideMenu = document.getElementById('sideMenu');
 
     const gameSound = new Audio('https://drive.google.com/uc?export=download&id=10JF1HqoHr8B7rsGnrCs9zl5w_UAnCBkW'); // Replace with your actual file ID
     gameSound.loop = true;
@@ -180,6 +228,14 @@
       }
     };
 
+    menuButton.onclick = () => {
+      if (sideMenu.style.left === '0px') {
+        sideMenu.style.left = '-100%';
+      } else {
+        sideMenu.style.left = '0px';
+      }
+    };
+
     function checkLevelUp() {
       if (level < levelThresholds.length && counter >= levelThresholds[level - 1]) {
         level++;
@@ -210,3 +266,4 @@
   </script>
 </body>
 </html>
+
