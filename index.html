@@ -97,7 +97,7 @@
     }
     #menuButton {
       position: absolute;
-      top: 2vw;
+      top: 6vw;
       left: 2vw;
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
@@ -107,6 +107,12 @@
       font-weight: bold;
       color: black;
       cursor: pointer;
+    }
+    #coins {
+      position: absolute;
+      top: 2vw;
+      left: 50%;
+      transform: translateX(-50%);
     }
     #sideMenu {
       position: fixed;
@@ -139,6 +145,7 @@
 <body>
   <div id="ui">
     <div class="ui-element" id="level">Level: 1</div>
+    <button id="menuButton">Menü</button>
     <div class="ui-element" id="coins">Coins: 0 <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Coin"></div>
     <div class="ui-element" id="username">@Doxbindatas</div>
   </div>
@@ -148,7 +155,6 @@
     <span>Hau Ihn</span>
   </div>
   <button id="soundControl">Sound Aus</button>
-  <button id="menuButton">Menü</button>
   
   <div id="sideMenu">
     <a href="#" id="shopButton">Shop</a>
@@ -266,4 +272,5 @@
   </script>
 </body>
 </html>
+
 
