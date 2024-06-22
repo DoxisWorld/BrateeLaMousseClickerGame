@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { 
+      background-image: url('https://cdn.wallpapersafari.com/79/31/E547v1.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: 'Arial', sans-serif;
+      font-size: 30px;
+      text-align: center;
+      color: rgb(0, 0, 0);
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
+    h1 {
+      font-size: 36px;
+      font-family: 'Verdana', sans-serif; /* Fixed */
+      margin: 20px;
+    }
+    #ui {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-align: right;
+    }
+    .ui-element {
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: black;
+      display: inline-flex;
+      align-items: center;
+    }
+    .ui-element img {
+      width: 30px;
+      height: 30px;
+      margin-left: 10px;
+    }
+    #score {
+      font-size: 60px;
+      font-weight: bold;
+      color: green;
+      margin-top: 20px;
+    }
+    #button {
+      width: 200px;
+      height: 200px;
+      background-color: rgba(0, 0, 255, 0.7); /* Semi-transparent blue */
+      border-radius: 100px;
+      margin: 0 auto;
+      line-height: 200px;
+      user-select: none;
+      margin-top: 50px; /* Adjusted for better alignment */
+      position: relative;
+    }
+    #button img {
+      width: 100%;
+      height: 100%;
+      border-radius: 100px;
+    }
+    #button span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      font-weight: bold;
+      color: rgb(24, 21, 21);
+      z-index: 1;
+    }
+    #shop {
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+      padding: 20px;
+      width: 90%; /* Adjusted width for better fit */
+      margin: 20px auto; /* Centered shop */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .shop-item {
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px;
+      text-align: left;
+      width: calc(25% - 20px); /* Adjusted for four items in a row */
+    }
+    .shop-item img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .shop-item button {
+      background-color: rgba(0, 0, 255, 0.7);
+      border: none;
+      border-radius: 5px;
+      color: white;
+      padding: 10px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .shop-item button img {
+      width: 20px;
+      height: 20px;
+      margin-left: 10px;
+    }
+  </style>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <h1>Bratee Mousse | Clicker Game</h1>
+  <div id="ui">
+    <div class="ui-element" id="level">Level: 1</div>
+    <div class="ui-element" id="coins">Coins: 0 <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Coin"></div>
+    <div class="ui-element" id="username">@Doxbindatas</div>
+  </div>
+  <div id="score">0</div>
+  <div id="button">
+    <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Hau Ihn">
+    <span>Hau Ihn</span>
+  </div>
+  <div id="shop">
+    <div class="shop-item" id="product1">
+      <img src="https://i.ibb.co/8MZTfKK/photo-2024-06-22-13-48-37.jpg" alt="Produkt 1">
+      <div>Produkt: Produkt 1</div>
+      <button onclick="upgradeProduct(1)">Lvl. 1 | 100 Coins <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Coin"></button>
+    </div>
+    <div class="shop-item" id="product2">
+      <img src="https://via.placeholder.com/150" alt="Produkt 2">
+      <div>Produkt: Produkt 2</div>
+      <button onclick="upgradeProduct(2)">Lvl. 1 | 200 Coins <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Coin"></button>
+    </div>
+    <div class="shop-item" id="product3">
+      <img src="https://via.placeholder.com/150" alt="Produkt 3">
+      <div>Produkt: Produkt 3</div>
+      <button onclick="upgradeProduct(3)">Lvl. 1 | 300 Coins <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Coin"></button>
+    </div>
+    <div class="shop-item" id="product4">
+      <img src="https://via.placeholder.com/150" alt="Produkt 4">
+      <div>Produkt: Produkt 4</div>
+      <button onclick="upgradeProduct(4)">Lvl. 1 | 400 Coins <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Coin"></button>
+    </div>
+  </div>
+  <script>
+    // Telegram Web App integration
+    Telegram.WebApp.ready();
+    const tg = window.Telegram.WebApp;
+    const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Unknown User';
+    document.getElementById('username').innerText = `@${username}`;
+
+    let counter = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
+    let coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
+    let level = localStorage.getItem('level') ? parseInt(localStorage.getItem('level')) : 1;
+
+    let products = JSON.parse(localStorage.getItem('products')) || [
+      {level: 1, cost: 100, increment: 2, autoClick: false},
+      {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null},
+      {level: 1, cost: 300, increment: 0, autoClick: false},
+      {level: 1, cost: 400, increment: 0, autoClick: false}
+    ];
+
+    const levelThresholds = [10, 50, 100, 200, 400]; // Thresholds for leveling up
+
+    document.getElementById('button').onclick = () => {
+      let increment = 1;
+      if (products[0].level > 1) {
+        increment += products[0].level - 1;
+      }
+      counter += increment;
+      coins += increment;
+      checkLevelUp();
+      saveGame();
+      updateUI();
+    };
+
+    function checkLevelUp() {
+      if (level < levelThresholds.length && counter >= levelThresholds[level - 1]) {
+        level++;
+        alert('Level Up! You are now at level ' + level);
+      }
+    }
+
+    function updateUI() {
+      document.getElementById('score').innerText = counter;
+      document.getElementById('coins').innerText = 'Coins: ' + coins;
+      document.getElementById('level').innerText = 'Level: ' + level;
+      products.forEach((product, index) => {
+        const productElem = document.getElementById(`product${index + 1}`);
+        productElem.querySelector('button').innerText = `Lvl. ${product.level} | ${product.cost} Coins`;
+      });
+    }
+
+    function upgradeProduct(productIndex) {
+      const product = products[productIndex - 1];
+      if (coins >= product.cost) {
+        coins -= product.cost;
+        product.level++;
+        product.cost = Math.round(product.cost * 1.5);
+        if (product.autoClick && !product.autoClickId) {
+          product.autoClickId = setInterval(() => {
+            counter += 1;
+            coins += 1;
+            saveGame();
+            updateUI();
+          }, product.interval);
+        }
+        saveGame();
+        updateUI();
+      }
+    }
+
+    function saveGame() {
+      localStorage.setItem('counter', counter);
+      localStorage.setItem('coins', coins);
+      localStorage.setItem('level', level);
+      localStorage.setItem('products', JSON.stringify(products));
+    }
+
+    window.onload = function() {
+      products.forEach((product, index) => {
+        if (product.autoClick && !product.autoClickId) {
+          product.autoClickId = setInterval(() => {
+            counter += 1;
+            coins += 1;
+            saveGame();
+            updateUI();
+          }, product.interval);
+        }
+      });
+      updateUI();
+    };
+
+    updateUI();
+  </script>
+</body>
+</html>
