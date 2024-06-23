@@ -372,13 +372,18 @@
       {level: 1, cost: 400, increment: 0, autoClick: false}
     ];
 
-    const levelThresholds = [250, 1000, 5000, 12500, 20000];
+    const levelThresholds = [250, 1000, 5000, 12500, 20000, 30000, 40000, 50000, 60000, 70000];
     const backgrounds = [
       'https://cdn.wallpapersafari.com/79/31/E547v1.jpg',
       'https://preview.redd.it/top-to-bottom-drysift-la-mousse-two-different-commercials-v0-n2ftecdj49ja1.jpg?auto=webp&s=d1b15da431aefa875b2c0da1ce271b13f71d39d9',
-      'https://cdn.wallpapersafari.com/3/30/D12k4C.jpg',
-      'https://cdn.wallpapersafari.com/8/24/C45l8P.jpg',
-      'https://cdn.wallpapersafari.com/1/28/B22f6G.jpg'
+      'https://www.buffed.de/screenshots/1280x1024/2021/02/TESO-Vorschau-Der-Kessel-3-buffed.jpg',
+      'https://images.mein-mmo.de/medien/2022/02/shroud-destiny2-witchqueen-twitch.jpg',
+      'https://cdn.wallpapersafari.com/1/28/B22f6G.jpg',
+      'https://www.grone.de/fileadmin/Grone_Niedersachsen/Foto__Dagmar_Oppolzer.jpg',
+      'https://th.bing.com/th/id/R.46f6edbb3628235df794bc3dd96f4984?rik=cqRzZyUmB63Otg&riu=http%3a%2f%2fmirtitek.com%2ftestscript%2fimages%2f11_sperma-781.jpg&ehk=%2bWVhXdYmTAgF2J5QBTsFRwBZPC1GFILcgdoRb%2bWQQsI%3d&risl=&pid=ImgRaw&r=0',
+      'https://example.com/background8.jpg',
+      'https://example.com/background9.jpg',
+      'https://example.com/background10.jpg'
     ];
 
     const button = document.getElementById('button');
@@ -472,7 +477,7 @@
     };
 
     function checkLevelUp() {
-      if (level < levelThresholds.length && coins >= levelThresholds[level]) {
+      if (level < levelThresholds.length && counter >= levelThresholds[level]) {
         level++;
         alert('Level Up! Du bist jetzt auf Level ' + level);
         document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
@@ -558,6 +563,7 @@
             }
             saveGame();
             updateUI();
+            populateShop(); // Update the shop list to reflect new costs and levels
           } else {
             alert('Nicht genug Coins!');
           }
@@ -621,9 +627,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
