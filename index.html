@@ -137,7 +137,7 @@
       display: none;
     }
 
-    #playSoundButton, #leaderboardButton {
+    #playSoundButton, #leaderboardButton, #saveButton, #loadButton {
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
       border-radius: 1vw;
@@ -161,9 +161,15 @@
       right: 2vw;
     }
 
+    #saveButton, #loadButton {
+      position: absolute;
+      bottom: 18vw;
+      right: 2vw;
+    }
+
     #menuButton {
       position: absolute;
-      top: 12vw; /* Adjusted top position for better spacing */
+      top: 12vw;
       left: 2vw;
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
@@ -242,6 +248,51 @@
       padding: 1vw 0;
       border-bottom: 1px solid rgba(0,0,0,0.1);
     }
+
+    #shop {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 300px;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+      transition: left 0.3s;
+      display: flex;
+      flex-direction: column;
+      padding-top: 5vw;
+    }
+
+    #shop h2 {
+      text-align: center;
+      font-size: 3.5vw;
+      margin-bottom: 2vw;
+    }
+
+    #shop ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    #shop li {
+      font-size: 2.5vw;
+      padding: 1vw 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    #shop button {
+      background-color: rgba(0, 0, 255, 0.7);
+      border: none;
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      margin: 1vw auto;
+      display: block;
+    }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -260,6 +311,8 @@
   <div id="coin-animation"></div>
   <button id="playSoundButton" onclick="toggleSound()">Sound Abspielen</button>
   <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
+  <button id="saveButton" onclick="saveGame()">Speichern</button>
+  <button id="loadButton" onclick="loadGame()">Laden</button>
   
   <div id="sideMenu">
     <a href="#" id="shopButton">Shop</a>
@@ -267,6 +320,10 @@
   <div id="leaderboardModal">
     <h2>Bestenliste</h2>
     <ul id="leaderboardList"></ul>
+  </div>
+  <div id="shop">
+    <h2>Shop</h2>
+    <ul id="shopList"></ul>
   </div>
   <script>
     Telegram.WebApp.ready();
@@ -304,6 +361,8 @@
     const coinAnimation = document.getElementById('coin-animation');
     const leaderboardModal = document.getElementById('leaderboardModal');
     const leaderboardList = document.getElementById('leaderboardList');
+    const shop = document.getElementById('shop');
+    const shopList = document.getElementById('shopList');
 
     let soundEnabled = true;
     const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
@@ -331,6 +390,7 @@
         }
       });
       updateUI();
+      populateShop();
     };
 
     button.addEventListener('mousedown', handleButtonPress);
@@ -362,6 +422,14 @@
       }
     };
 
+    document.getElementById('shopButton').onclick = () => {
+      if (shop.style.left === '0px') {
+        shop.style.left = '-100%';
+      } else {
+        shop.style.left = '0px';
+      }
+    };
+
     function checkLevelUp() {
       if (level < levelThresholds.length && coins >= levelThresholds[level]) {
         level++;
@@ -389,6 +457,20 @@
       localStorage.setItem('coins', coins);
       localStorage.setItem('level', level);
       localStorage.setItem('products', JSON.stringify(products));
+    }
+
+    function loadGame() {
+      counter = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
+      coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
+      level = localStorage.getItem('level') ? parseInt(localStorage.getItem('level')) : 1;
+      products = JSON.parse(localStorage.getItem('products')) || [
+        {level: 1, cost: 100, increment: 2, autoClick: false},
+        {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null},
+        {level: 1, cost: 300, increment: 0, autoClick: false},
+        {level: 1, cost: 400, increment: 0, autoClick: false}
+      ];
+      updateUI();
+      alert('Spielstand geladen!');
     }
 
     function showCoinAnimation(x, y) {
@@ -426,9 +508,41 @@
       });
     }
 
+    function populateShop() {
+      shopList.innerHTML = '';
+      products.forEach((product, index) => {
+        const li = document.createElement('li');
+        li.innerText = `Produkt ${index + 1} - Level: ${product.level}, Kosten: ${product.cost} Coins, Erhöhung: ${product.increment}`;
+        const button = document.createElement('button');
+        button.innerText = `Kaufen für ${product.cost} Coins`;
+        button.onclick = () => {
+          if (coins >= product.cost) {
+            coins -= product.cost;
+            product.level++;
+            product.cost *= 2;
+            if (product.autoClick && !product.autoClickId) {
+              product.autoClickId = setInterval(() => {
+                counter += 1;
+                coins += 1;
+                saveGame();
+                updateUI();
+              }, product.interval);
+            }
+            saveGame();
+            updateUI();
+          } else {
+            alert('Nicht genug Coins!');
+          }
+        };
+        li.appendChild(button);
+        shopList.appendChild(li);
+      });
+    }
+
     updateUI();
   </script>
 </body>
 </html>
+
 
 
