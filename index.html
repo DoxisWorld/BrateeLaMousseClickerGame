@@ -63,7 +63,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 3;
+      z-index: 2;
     }
 
     .ui-element {
@@ -137,7 +137,7 @@
       display: none;
     }
 
-    #playSoundButton, #leaderboardButton, #saveButton, #loadButton {
+    #playSoundButton, #leaderboardButton, #saveButton, #loadButton, #resetButton, #inviteFriendButton {
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
       border-radius: 1vw;
@@ -161,9 +161,18 @@
       right: 2vw;
     }
 
-    #saveButton, #loadButton {
+    #saveButton, #loadButton, #resetButton {
       position: absolute;
       bottom: 18vw;
+      right: 2vw;
+    }
+
+    #resetButton {
+      bottom: 26vw;
+    }
+
+    #inviteFriendButton {
+      bottom: 34vw;
       right: 2vw;
     }
 
@@ -179,6 +188,7 @@
       font-weight: bold;
       color: black;
       cursor: pointer;
+      z-index: 2;
     }
 
     #coins {
@@ -200,6 +210,7 @@
       display: flex;
       flex-direction: column;
       padding-top: 5vw;
+      z-index: 3;
     }
 
     #sideMenu a {
@@ -230,6 +241,7 @@
       overflow: auto;
       padding: 2vw;
       box-sizing: border-box;
+      z-index: 4;
     }
 
     #leaderboardModal h2 {
@@ -261,6 +273,7 @@
       display: flex;
       flex-direction: column;
       padding-top: 5vw;
+      z-index: 3;
     }
 
     #shop h2 {
@@ -313,6 +326,8 @@
   <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
   <button id="saveButton" onclick="saveGame()">Speichern</button>
   <button id="loadButton" onclick="loadGame()">Laden</button>
+  <button id="resetButton" onclick="resetGame()">Zurücksetzen</button>
+  <button id="inviteFriendButton" onclick="inviteFriend()">Freund Einladen</button>
   
   <div id="sideMenu">
     <a href="#" id="shopButton">Shop</a>
@@ -382,13 +397,14 @@
       products.forEach((product, index) => {
         if (product.autoClick && !product.autoClickId) {
           product.autoClickId = setInterval(() => {
-            counter += 1;
-            coins += 1;
+            counter += product.increment;
+            coins += product.increment;
             saveGame();
             updateUI();
           }, product.interval);
         }
       });
+      checkForFriendJoin();
       updateUI();
       populateShop();
     };
@@ -400,7 +416,7 @@
 
     function handleButtonPress(event) {
       button.style.transform = 'scale(0.95)';
-      const increment = products[0].level > 1 ? products[0].level : 1;
+      const increment = products[0].increment > 1 ? products[0].increment : 1;
       counter += increment;
       coins += increment;
       checkLevelUp();
@@ -473,6 +489,24 @@
       alert('Spielstand geladen!');
     }
 
+    function resetGame() {
+      localStorage.removeItem('counter');
+      localStorage.removeItem('coins');
+      localStorage.removeItem('level');
+      localStorage.removeItem('products');
+      counter = 0;
+      coins = 0;
+      level = 1;
+      products = [
+        {level: 1, cost: 100, increment: 2, autoClick: false},
+        {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null},
+        {level: 1, cost: 300, increment: 0, autoClick: false},
+        {level: 1, cost: 400, increment: 0, autoClick: false}
+      ];
+      updateUI();
+      alert('Spiel zurückgesetzt!');
+    }
+
     function showCoinAnimation(x, y) {
       const clone = coinAnimation.cloneNode(true);
       clone.style.left = `${x - 20}px`;
@@ -519,11 +553,12 @@
           if (coins >= product.cost) {
             coins -= product.cost;
             product.level++;
-            product.cost *= 2;
+            product.cost = Math.floor(product.cost * 1.5); // Cost increases by 50% each level
+            product.increment += 1; // Increment increases by 1 each level
             if (product.autoClick && !product.autoClickId) {
               product.autoClickId = setInterval(() => {
-                counter += 1;
-                coins += 1;
+                counter += product.increment;
+                coins += product.increment;
                 saveGame();
                 updateUI();
               }, product.interval);
@@ -539,10 +574,45 @@
       });
     }
 
+    function inviteFriend() {
+      const link = `https://yourgame.com?ref=${username}`;
+      navigator.clipboard.writeText(link).then(() => {
+        alert('Einladungslink wurde kopiert! Teile ihn mit deinen Freunden.');
+        // Add reward for inviting a friend
+        coins += 100;
+        saveGame();
+        updateUI();
+      }, (err) => {
+        console.error('Fehler beim Kopieren des Einladungslinks: ', err);
+      });
+    }
+
+    function checkForFriendJoin() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('ref');
+      if (ref && ref !== username) {
+        let invites = JSON.parse(localStorage.getItem('invites')) || [];
+        if (!invites.includes(ref)) {
+          invites.push(ref);
+          localStorage.setItem('invites', JSON.stringify(invites));
+          notifyFriendJoined(ref);
+          // Reward the referrer
+          coins += 200;
+          saveGame();
+          updateUI();
+        }
+      }
+    }
+
+    function notifyFriendJoined(friendUsername) {
+      alert(`Dein Freund @${friendUsername} ist dem Spiel beigetreten! Du hast 200 Coins verdient.`);
+    }
+
     updateUI();
   </script>
 </body>
 </html>
+
 
 
 
