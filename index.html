@@ -247,13 +247,13 @@
   <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
   
   <div id="sideMenu">
-    <a href="#" id="shopButton">
+    <a href="#" id="shopButton"></a>
   </div>
-    <div id="leaderboardModal">
+  <div id="leaderboardModal">
     <h2>Bestenliste</h2>
     <ul id="leaderboardList"></ul>
   </div>
-    <script>
+  <script>
     Telegram.WebApp.ready();
     const tg = window.Telegram.WebApp;
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Unknown User';
@@ -398,8 +398,10 @@
 
     updateUI();
   </script>
-  </body>
+</body>
 </html>
+
+
 
 
 
