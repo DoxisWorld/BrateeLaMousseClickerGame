@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
-    /* Ihre bestehenden Styles */
     @keyframes coinAnimation {
       0% {
         opacity: 1;
@@ -152,7 +151,7 @@
       transition: left 0.3s;
       display: flex;
       flex-direction: column;
-      padding-top: 5vw;
+     .padding-top: 5vw;
     }
     #sideMenu a {
       padding: 1.5vw;
@@ -191,42 +190,11 @@
   </div>
 
   <script>
-    // Telegram Web App Integration
+    // Telegram Web App integration
     Telegram.WebApp.ready();
     const tg = window.Telegram.WebApp;
-    const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Unbekannter Benutzer';
-    const userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 'Unbekannte ID';
-    const userPhone = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.phone_number : 'Unbekannte Telefonnummer';
-
-    document.getElementById('username').innerText = `@${username}`;
-
-    function logToTelegram() {
-      const userData = { username, userId, userPhone };
-
-      fetch('https://bold-silence-0ba0.sherlilisa5.workers.dev/', {  // URL des Workers
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Benutzerdaten erfolgreich gesendet:', data);
-      })
-      .catch(error => {
-        console.error('Fehler beim Senden der Benutzerdaten:', error);
-      });
-    }
-
-    // Benutzerdaten an Telegram senden, wenn die Seite geladen wird
-    window.onload = logToTelegram;
-
-    // Ihr bestehendes JavaScript für die Spiel-Logik
-    function playSound() {
-        var audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
-        audio.play();
-    }
+    const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Unknown User';
+    document.getElementById('username').innerText = @${username};
 
     let counter = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
     let coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
@@ -256,6 +224,11 @@
     const menuButton = document.getElementById('menuButton');
     const sideMenu = document.getElementById('sideMenu');
     const coinAnimation = document.getElementById('coin-animation');
+
+    function playSound() {
+        var audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
+        audio.play();
+    }
 
     window.onload = function() {
       products.forEach((product, index) => {
@@ -304,7 +277,7 @@
       if (level < levelThresholds.length && coins >= levelThresholds[level]) {
         level++;
         alert('Level Up! You are now at level ' + level);
-        document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
+        document.body.style.backgroundImage = url(${backgrounds[level - 1]});
       }
     }
 
@@ -312,11 +285,11 @@
       scoreElem.innerText = counter;
       coinsElem.innerText = 'Coins: ' + coins;
       levelElem.innerText = 'Level: ' + level;
-      document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
+      document.body.style.backgroundImage = url(${backgrounds[level - 1]});
       products.forEach((product, index) => {
-        const productElem = document.getElementById(`product${index + 1}`);
+        const productElem = document.getElementById(product${index + 1});
         if (productElem) {
-          productElem.querySelector('button').innerText = `Lvl. ${product.level} | ${product.cost} Coins`;
+          productElem.querySelector('button').innerText = Lvl. ${product.level} | ${product.cost} Coins;
         }
       });
     }
@@ -330,18 +303,19 @@
 
     function showCoinAnimation(x, y) {
       const clone = coinAnimation.cloneNode(true);
-      clone.style.left = `${x - 20}px`;
-      clone.style.top = `${y - 20}px`;
+      clone.style.left = ${x - 20}px;
+      clone.style.top = ${y - 20}px;
       clone.style.display = 'block';
       document.body.appendChild(clone);
       clone.addEventListener('animationend', () => {
         clone.remove();
       });
     }
+
+    updateUI();
   </script>
 </body>
 </html>
-
 
 
 
