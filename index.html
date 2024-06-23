@@ -575,13 +575,9 @@
     }
 
     function inviteFriend() {
-      const link = `https://yourgame.com?ref=${username}`;
+      const link = `https://t.me/DoxisGameBot/BrateeLaMousse?ref=${username}`;
       navigator.clipboard.writeText(link).then(() => {
         alert('Einladungslink wurde kopiert! Teile ihn mit deinen Freunden.');
-        // Add reward for inviting a friend
-        coins += 100;
-        saveGame();
-        updateUI();
       }, (err) => {
         console.error('Fehler beim Kopieren des Einladungslinks: ', err);
       });
@@ -591,27 +587,48 @@
       const urlParams = new URLSearchParams(window.location.search);
       const ref = urlParams.get('ref');
       if (ref && ref !== username) {
-        let invites = JSON.parse(localStorage.getItem('invites')) || [];
-        if (!invites.includes(ref)) {
-          invites.push(ref);
-          localStorage.setItem('invites', JSON.stringify(invites));
+        let joins = JSON.parse(localStorage.getItem('joins')) || {};
+        if (!joins[ref]) {
+          joins[ref] = false;
+          localStorage.setItem('joins', JSON.stringify(joins));
           notifyFriendJoined(ref);
-          // Reward the referrer
-          coins += 200;
-          saveGame();
-          updateUI();
         }
       }
     }
 
-    function notifyFriendJoined(friendUsername) {
-      alert(`Dein Freund @${friendUsername} ist dem Spiel beigetreten! Du hast 200 Coins verdient.`);
+    function notifyFriendJoined(referrerUsername) {
+      // Simulate friend joining after some time
+      setTimeout(() => {
+        let joins = JSON.parse(localStorage.getItem('joins'));
+        if (joins && !joins[referrerUsername]) {
+          joins[referrerUsername] = true;
+          localStorage.setItem('joins', JSON.stringify(joins));
+          alert(`Dein Freund @${referrerUsername} ist dem Spiel beigetreten!`);
+          awardReferralBonus(referrerUsername);
+        }
+      }, 5000); // Simulate delay for friend joining
+    }
+
+    function awardReferralBonus(referrerUsername) {
+      let referrers = JSON.parse(localStorage.getItem('referrers')) || {};
+      if (!referrers[referrerUsername]) {
+        referrers[referrerUsername] = 0;
+      }
+      referrers[referrerUsername] += 200; // Award 200 coins
+      localStorage.setItem('referrers', JSON.stringify(referrers));
+      if (referrerUsername === username) {
+        coins += 200;
+        saveGame();
+        updateUI();
+        alert('Du hast 200 Coins verdient, weil dein Freund beigetreten ist!');
+      }
     }
 
     updateUI();
   </script>
 </body>
 </html>
+
 
 
 
