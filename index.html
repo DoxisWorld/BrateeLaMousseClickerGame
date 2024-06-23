@@ -32,6 +32,7 @@
       justify-content: center;
       height: 100vh;
     }
+
     #ui {
       width: 100%;
       display: flex;
@@ -43,21 +44,24 @@
       left: 0;
       z-index: 3;
     }
+
     .ui-element {
       background-color: rgba(255, 255, 255, 0.5);
       border-radius: 1vw;
       padding: 1vw 2vw;
-      font-size: 3.5vw; /* Vergrößert */
+      font-size: 3.5vw;
       font-weight: bold;
       color: black;
       display: inline-flex;
       align-items: center;
     }
+
     .ui-element img {
       width: 2.5vw;
       height: 2.5vw;
       margin-left: 1vw;
     }
+
     #score {
       font-size: 6vw;
       font-weight: bold;
@@ -69,12 +73,13 @@
       display: inline-block;
       color: white;
     }
+
     #button {
-      width: 50vw; /* Vergrößert */
-      height: 50vw; /* Vergrößert */
+      width: 50vw;
+      height: 50vw;
       background-color: rgba(0, 0, 255, 0.7);
       border-radius: 50%;
-      line-height: 50vw; /* Anpassung der Zeilenhöhe */
+      line-height: 50vw;
       user-select: none;
       position: relative;
       display: flex;
@@ -83,21 +88,25 @@
       margin: auto;
       transition: transform 0.1s;
     }
+
     #button img {
       width: 100%;
       height: 100%;
       border-radius: 50%;
     }
+
     #button span {
       position: absolute;
-      font-size: 8vw; /* Vergrößert */
+      font-size: 8vw;
       font-weight: bold;
       color: rgb(24, 21, 21);
       z-index: 1;
     }
+
     #button:active {
       transform: scale(0.95);
     }
+
     #coin-animation {
       position: absolute;
       width: 10vw;
@@ -108,6 +117,7 @@
       pointer-events: none;
       display: none;
     }
+
     #playSoundButton {
       position: absolute;
       bottom: 2vw;
@@ -121,9 +131,10 @@
       color: black;
       cursor: pointer;
     }
+
     #menuButton {
       position: absolute;
-      top: 8vw; /* Tiefer platziert */
+      top: 8vw;
       left: 2vw;
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
@@ -134,12 +145,14 @@
       color: black;
       cursor: pointer;
     }
+
     #coins {
       position: absolute;
       top: 2vw;
       left: 50%;
       transform: translateX(-50%);
     }
+
     #sideMenu {
       position: fixed;
       top: 0;
@@ -151,8 +164,9 @@
       transition: left 0.3s;
       display: flex;
       flex-direction: column;
-     .padding-top: 5vw;
+      padding-top: 5vw;
     }
+
     #sideMenu a {
       padding: 1.5vw;
       text-align: center;
@@ -162,8 +176,56 @@
       text-decoration: none;
       margin-bottom: 1vw;
     }
+
     #sideMenu a:hover {
       background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    #leaderboardButton {
+      position: absolute;
+      bottom: 10vw;
+      right: 2vw;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+    }
+
+    #leaderboardModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80vw;
+      height: 80vh;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 1vw;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      overflow: auto;
+      padding: 2vw;
+      box-sizing: border-box;
+    }
+
+    #leaderboardModal h2 {
+      text-align: center;
+      font-size: 3.5vw;
+      margin-bottom: 2vw;
+    }
+
+    #leaderboardModal ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    #leaderboardModal li {
+      font-size: 2.5vw;
+      padding: 1vw 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
     }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -181,16 +243,17 @@
     <span>Hau Ihn</span>
   </div>
   <div id="coin-animation"></div>
-  <button id="playSoundButton" onclick="playSound()">Play Sound</button>
+  <button id="playSoundButton" onclick="playSound()">Sound Abspielen</button>
+  <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
   
   <div id="sideMenu">
-    <a href="#" id="shopButton">Shop</a>
-    <a href="#" id="freeCoinsButton">Free Coins</a>
-    <a href="#" id="aboutButton">About</a>
+    <a href="#" id="shopButton">
   </div>
-
-  <script>
-    // Telegram Web App integration
+    <div id="leaderboardModal">
+    <h2>Bestenliste</h2>
+    <ul id="leaderboardList"></ul>
+  </div>
+    <script>
     Telegram.WebApp.ready();
     const tg = window.Telegram.WebApp;
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Unknown User';
@@ -207,13 +270,13 @@
       {level: 1, cost: 400, increment: 0, autoClick: false}
     ];
 
-    const levelThresholds = [250, 1000, 5000, 12500, 20000]; // Thresholds for leveling up
+    const levelThresholds = [250, 1000, 5000, 12500, 20000];
     const backgrounds = [
-      'https://cdn.wallpapersafari.com/79/31/E547v1.jpg', // Level 1
-      'https://preview.redd.it/top-to-bottom-drysift-la-mousse-two-different-commercials-v0-n2ftecdj49ja1.jpg?auto=webp&s=d1b15da431aefa875b2c0da1ce271b13f71d39d9',  // Level 2
-      'https://cdn.wallpapersafari.com/3/30/D12k4C.jpg',  // Level 3
-      'https://cdn.wallpapersafari.com/8/24/C45l8P.jpg',  // Level 4
-      'https://cdn.wallpapersafari.com/1/28/B22f6G.jpg'   // Level 5
+      'https://cdn.wallpapersafari.com/79/31/E547v1.jpg',
+      'https://preview.redd.it/top-to-bottom-drysift-la-mousse-two-different-commercials-v0-n2ftecdj49ja1.jpg?auto=webp&s=d1b15da431aefa875b2c0da1ce271b13f71d39d9',
+      'https://cdn.wallpapersafari.com/3/30/D12k4C.jpg',
+      'https://cdn.wallpapersafari.com/8/24/C45l8P.jpg',
+      'https://cdn.wallpapersafari.com/1/28/B22f6G.jpg'
     ];
 
     const button = document.getElementById('button');
@@ -224,6 +287,8 @@
     const menuButton = document.getElementById('menuButton');
     const sideMenu = document.getElementById('sideMenu');
     const coinAnimation = document.getElementById('coin-animation');
+    const leaderboardModal = document.getElementById('leaderboardModal');
+    const leaderboardList = document.getElementById('leaderboardList');
 
     function playSound() {
         var audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
@@ -244,7 +309,6 @@
       updateUI();
     };
 
-    // Button click handling for desktop and mobile
     button.addEventListener('mousedown', handleButtonPress);
     button.addEventListener('mouseup', handleButtonRelease);
     button.addEventListener('touchstart', handleButtonPress);
@@ -276,7 +340,7 @@
     function checkLevelUp() {
       if (level < levelThresholds.length && coins >= levelThresholds[level]) {
         level++;
-        alert('Level Up! You are now at level ' + level);
+        alert('Level Up! Du bist jetzt auf Level ' + level);
         document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
       }
     }
@@ -312,10 +376,33 @@
       });
     }
 
+    function toggleLeaderboard() {
+      if (leaderboardModal.style.display === 'none' || leaderboardModal.style.display === '') {
+        populateLeaderboard();
+        leaderboardModal.style.display = 'block';
+      } else {
+        leaderboardModal.style.display = 'none';
+      }
+    }
+
+    function populateLeaderboard() {
+      leaderboardList.innerHTML = '';
+      let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+      leaderboard.sort((a, b) => b.coins - a.coins);
+      leaderboard.slice(0, 50).forEach((player, index) => {
+        const li = document.createElement('li');
+        li.innerText = `Platz ${index + 1}: @${player.username} Anzahl der Coins: ${player.coins}`;
+        leaderboardList.appendChild(li);
+      });
+    }
+
     updateUI();
   </script>
-</body>
+  </body>
 </html>
+
+
+
 
 
 
