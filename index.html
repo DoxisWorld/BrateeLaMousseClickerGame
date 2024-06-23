@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
+    /* Vorhandene CSS-Styles */
     @keyframes coinAnimation {
       0% {
         opacity: 1;
@@ -12,15 +13,6 @@
       100% {
         opacity: 0;
         transform: translateY(-100px) scale(0.5);
-      }
-    }
-
-    @keyframes buttonSpin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
       }
     }
 
@@ -321,6 +313,33 @@
       color: black;
       cursor: pointer;
     }
+
+    #dailyReward {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 1vw;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      width: 60vw;
+      padding: 2vw;
+      text-align: center;
+      z-index: 5;
+      display: none;
+    }
+
+    #dailyReward button {
+      background-color: rgba(0, 255, 0, 0.7);
+      border: none;
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      margin-top: 2vw;
+    }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -341,7 +360,7 @@
   <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
   <button id="saveButton" onclick="saveGame()">Speichern</button>
   <button id="inviteFriendButton" onclick="inviteFriend()">Freund Einladen</button>
-  
+
   <div id="sideMenu">
     <span id="sideMenuClose">✖</span>
     <a href="#" id="shopButton">Shop</a>
@@ -354,6 +373,11 @@
     <span id="shopClose">✖</span>
     <h2>Shop</h2>
     <ul id="shopList"></ul>
+  </div>
+  <div id="dailyReward">
+    <h2>Tägliche Belohnung</h2>
+    <p>Herzlichen Glückwunsch! Du hast deine tägliche Belohnung erhalten.</p>
+    <button id="collectRewardButton">Belohnung Einsammeln</button>
   </div>
   <script>
     Telegram.WebApp.ready();
@@ -376,11 +400,11 @@
     const backgrounds = [
       'https://cdn.wallpapersafari.com/79/31/E547v1.jpg',
       'https://preview.redd.it/top-to-bottom-drysift-la-mousse-two-different-commercials-v0-n2ftecdj49ja1.jpg?auto=webp&s=d1b15da431aefa875b2c0da1ce271b13f71d39d9',
-      'https://www.buffed.de/screenshots/1280x1024/2021/02/TESO-Vorschau-Der-Kessel-3-buffed.jpg',
-      'https://images.mein-mmo.de/medien/2022/02/shroud-destiny2-witchqueen-twitch.jpg',
+      'https://cdn.wallpapersafari.com/3/30/D12k4C.jpg',
+      'https://cdn.wallpapersafari.com/8/24/C45l8P.jpg',
       'https://cdn.wallpapersafari.com/1/28/B22f6G.jpg',
-      'https://www.grone.de/fileadmin/Grone_Niedersachsen/Foto__Dagmar_Oppolzer.jpg',
-      'https://th.bing.com/th/id/R.46f6edbb3628235df794bc3dd96f4984?rik=cqRzZyUmB63Otg&riu=http%3a%2f%2fmirtitek.com%2ftestscript%2fimages%2f11_sperma-781.jpg&ehk=%2bWVhXdYmTAgF2J5QBTsFRwBZPC1GFILcgdoRb%2bWQQsI%3d&risl=&pid=ImgRaw&r=0',
+      'https://example.com/background6.jpg',
+      'https://example.com/background7.jpg',
       'https://example.com/background8.jpg',
       'https://example.com/background9.jpg',
       'https://example.com/background10.jpg'
@@ -400,6 +424,8 @@
     const shopList = document.getElementById('shopList');
     const sideMenuClose = document.getElementById('sideMenuClose');
     const shopClose = document.getElementById('shopClose');
+    const dailyReward = document.getElementById('dailyReward');
+    const collectRewardButton = document.getElementById('collectRewardButton');
 
     let soundEnabled = true;
     const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
@@ -429,6 +455,7 @@
       checkForFriendJoin();
       updateUI();
       populateShop();
+      checkDailyReward();
     };
 
     button.addEventListener('mousedown', handleButtonPress);
@@ -622,6 +649,24 @@
         alert('Du hast 200 Coins verdient, weil dein Freund beigetreten ist!');
       }
     }
+
+    function checkDailyReward() {
+      const lastClaimed = localStorage.getItem('lastClaimed');
+      const now = new Date().getTime();
+      const oneDay = 24 * 60 * 60 * 1000;
+
+      if (!lastClaimed || now - lastClaimed > oneDay) {
+        dailyReward.style.display = 'block';
+      }
+    }
+
+    collectRewardButton.onclick = () => {
+      coins += 50; // Daily reward of 50 coins
+      saveGame();
+      updateUI();
+      dailyReward.style.display = 'none';
+      localStorage.setItem('lastClaimed', new Date().getTime());
+    };
 
     updateUI();
   </script>
