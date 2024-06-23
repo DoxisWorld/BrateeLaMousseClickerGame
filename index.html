@@ -137,7 +137,7 @@
       display: none;
     }
 
-    #playSoundButton, #leaderboardButton, #saveButton, #loadButton, #resetButton, #inviteFriendButton {
+    #playSoundButton, #leaderboardButton, #saveButton, #inviteFriendButton {
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
       border-radius: 1vw;
@@ -161,19 +161,14 @@
       right: 2vw;
     }
 
-    #saveButton, #loadButton, #resetButton {
+    #saveButton, #inviteFriendButton {
       position: absolute;
       bottom: 18vw;
       right: 2vw;
     }
 
-    #resetButton {
-      bottom: 26vw;
-    }
-
     #inviteFriendButton {
-      bottom: 34vw;
-      right: 2vw;
+      bottom: 26vw;
     }
 
     #menuButton {
@@ -225,6 +220,16 @@
 
     #sideMenu a:hover {
       background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    #sideMenuClose {
+      position: absolute;
+      top: 1vw;
+      right: 1vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
     }
 
     #leaderboardModal {
@@ -306,6 +311,16 @@
       margin: 1vw auto;
       display: block;
     }
+
+    #shopClose {
+      position: absolute;
+      top: 1vw;
+      right: 1vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+    }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -325,11 +340,10 @@
   <button id="playSoundButton" onclick="toggleSound()">Sound Abspielen</button>
   <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
   <button id="saveButton" onclick="saveGame()">Speichern</button>
-  <button id="loadButton" onclick="loadGame()">Laden</button>
-  <button id="resetButton" onclick="resetGame()">Zurücksetzen</button>
   <button id="inviteFriendButton" onclick="inviteFriend()">Freund Einladen</button>
   
   <div id="sideMenu">
+    <span id="sideMenuClose">✖</span>
     <a href="#" id="shopButton">Shop</a>
   </div>
   <div id="leaderboardModal">
@@ -337,6 +351,7 @@
     <ul id="leaderboardList"></ul>
   </div>
   <div id="shop">
+    <span id="shopClose">✖</span>
     <h2>Shop</h2>
     <ul id="shopList"></ul>
   </div>
@@ -378,6 +393,8 @@
     const leaderboardList = document.getElementById('leaderboardList');
     const shop = document.getElementById('shop');
     const shopList = document.getElementById('shopList');
+    const sideMenuClose = document.getElementById('sideMenuClose');
+    const shopClose = document.getElementById('shopClose');
 
     let soundEnabled = true;
     const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
@@ -438,12 +455,20 @@
       }
     };
 
+    sideMenuClose.onclick = () => {
+      sideMenu.style.left = '-100%';
+    };
+
     document.getElementById('shopButton').onclick = () => {
       if (shop.style.left === '0px') {
         shop.style.left = '-100%';
       } else {
         shop.style.left = '0px';
       }
+    };
+
+    shopClose.onclick = () => {
+      shop.style.left = '-100%';
     };
 
     function checkLevelUp() {
@@ -473,38 +498,6 @@
       localStorage.setItem('coins', coins);
       localStorage.setItem('level', level);
       localStorage.setItem('products', JSON.stringify(products));
-    }
-
-    function loadGame() {
-      counter = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
-      coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
-      level = localStorage.getItem('level') ? parseInt(localStorage.getItem('level')) : 1;
-      products = JSON.parse(localStorage.getItem('products')) || [
-        {level: 1, cost: 100, increment: 2, autoClick: false},
-        {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null},
-        {level: 1, cost: 300, increment: 0, autoClick: false},
-        {level: 1, cost: 400, increment: 0, autoClick: false}
-      ];
-      updateUI();
-      alert('Spielstand geladen!');
-    }
-
-    function resetGame() {
-      localStorage.removeItem('counter');
-      localStorage.removeItem('coins');
-      localStorage.removeItem('level');
-      localStorage.removeItem('products');
-      counter = 0;
-      coins = 0;
-      level = 1;
-      products = [
-        {level: 1, cost: 100, increment: 2, autoClick: false},
-        {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null},
-        {level: 1, cost: 300, increment: 0, autoClick: false},
-        {level: 1, cost: 400, increment: 0, autoClick: false}
-      ];
-      updateUI();
-      alert('Spiel zurückgesetzt!');
     }
 
     function showCoinAnimation(x, y) {
@@ -628,6 +621,7 @@
   </script>
 </body>
 </html>
+
 
 
 
