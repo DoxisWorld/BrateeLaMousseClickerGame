@@ -194,7 +194,7 @@
     Telegram.WebApp.ready();
     const tg = window.Telegram.WebApp;
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Unknown User';
-    document.getElementById('username').innerText = @${username};
+    document.getElementById('username').innerText = `@${username}`;
 
     let counter = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
     let coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
@@ -277,7 +277,7 @@
       if (level < levelThresholds.length && coins >= levelThresholds[level]) {
         level++;
         alert('Level Up! You are now at level ' + level);
-        document.body.style.backgroundImage = url(${backgrounds[level - 1]});
+        document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
       }
     }
 
@@ -285,11 +285,11 @@
       scoreElem.innerText = counter;
       coinsElem.innerText = 'Coins: ' + coins;
       levelElem.innerText = 'Level: ' + level;
-      document.body.style.backgroundImage = url(${backgrounds[level - 1]});
+      document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
       products.forEach((product, index) => {
-        const productElem = document.getElementById(product${index + 1});
+        const productElem = document.getElementById(`product${index + 1}`);
         if (productElem) {
-          productElem.querySelector('button').innerText = Lvl. ${product.level} | ${product.cost} Coins;
+          productElem.querySelector('button').innerText = `Lvl. ${product.level} | ${product.cost} Coins`;
         }
       });
     }
@@ -303,8 +303,8 @@
 
     function showCoinAnimation(x, y) {
       const clone = coinAnimation.cloneNode(true);
-      clone.style.left = ${x - 20}px;
-      clone.style.top = ${y - 20}px;
+      clone.style.left = `${x - 20}px`;
+      clone.style.top = `${y - 20}px`;
       clone.style.display = 'block';
       document.body.appendChild(clone);
       clone.addEventListener('animationend', () => {
@@ -316,6 +316,7 @@
   </script>
 </body>
 </html>
+
 
 
 
