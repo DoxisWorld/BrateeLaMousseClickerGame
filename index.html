@@ -15,6 +15,27 @@
       }
     }
 
+    @keyframes buttonSpin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes levelUpAnimation {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
     body {
       background-image: url('https://cdn.wallpapersafari.com/79/31/E547v1.jpg');
       background-size: cover;
@@ -142,7 +163,7 @@
 
     #menuButton {
       position: absolute;
-      top: 8vw;
+      top: 12vw; /* Adjusted top position for better spacing */
       left: 2vw;
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
@@ -346,6 +367,7 @@
         level++;
         alert('Level Up! Du bist jetzt auf Level ' + level);
         document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
+        button.style.animation = 'levelUpAnimation 1s ease-in-out';
       }
     }
 
@@ -380,6 +402,10 @@
       });
     }
 
+    button.addEventListener('animationend', () => {
+      button.style.animation = '';
+    });
+
     function toggleLeaderboard() {
       if (leaderboardModal.style.display === 'none' || leaderboardModal.style.display === '') {
         populateLeaderboard();
@@ -404,4 +430,5 @@
   </script>
 </body>
 </html>
+
 
