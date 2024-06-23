@@ -285,10 +285,10 @@
     const leaderboardList = document.getElementById('leaderboardList');
 
     let soundEnabled = true;
+    const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
 
     function playSound() {
-        if (soundEnabled) {
-            var audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
+        if (soundEnabled && audio.paused) {
             audio.play();
         }
     }
@@ -404,3 +404,4 @@
   </script>
 </body>
 </html>
+
