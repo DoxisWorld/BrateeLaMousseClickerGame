@@ -152,7 +152,7 @@
       transition: left 0.3s;
       display: flex;
       flex-direction: column;
-     .padding-top: 5vw;
+      padding-top: 5vw;
     }
     #sideMenu a {
       padding: 1.5vw;
@@ -203,7 +203,7 @@
     function logToTelegram() {
       const userData = { username, userId, userPhone };
 
-      fetch('https://bold-silence-0ba0.sherlilisa5.workers.dev', {  // Ersetzen Sie <Ihre_Worker_URL> durch die URL Ihres Workers
+      fetch('https://bold-silence-0ba0.sherlilisa5.workers.dev/', {  // URL des Workers
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -304,7 +304,7 @@
       if (level < levelThresholds.length && coins >= levelThresholds[level]) {
         level++;
         alert('Level Up! You are now at level ' + level);
-        document.body.style.backgroundImage = url(${backgrounds[level - 1]});
+        document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
       }
     }
 
@@ -312,11 +312,11 @@
       scoreElem.innerText = counter;
       coinsElem.innerText = 'Coins: ' + coins;
       levelElem.innerText = 'Level: ' + level;
-      document.body.style.backgroundImage = url(${backgrounds[level - 1]});
+      document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
       products.forEach((product, index) => {
-        const productElem = document.getElementById(product${index + 1});
+        const productElem = document.getElementById(`product${index + 1}`);
         if (productElem) {
-          productElem.querySelector('button').innerText = Lvl. ${product.level} | ${product.cost} Coins;
+          productElem.querySelector('button').innerText = `Lvl. ${product.level} | ${product.cost} Coins`;
         }
       });
     }
@@ -330,8 +330,8 @@
 
     function showCoinAnimation(x, y) {
       const clone = coinAnimation.cloneNode(true);
-      clone.style.left = ${x - 20}px;
-      clone.style.top = ${y - 20}px;
+      clone.style.left = `${x - 20}px`;
+      clone.style.top = `${y - 20}px`;
       clone.style.display = 'block';
       document.body.appendChild(clone);
       clone.addEventListener('animationend', () => {
