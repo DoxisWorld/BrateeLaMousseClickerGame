@@ -307,6 +307,8 @@
         }
       });
       updateUI();
+      setInterval(populateLeaderboard, 15000); // Update leaderboard every 15 seconds
+      updateLeaderboard(); // Initial update
     };
 
     button.addEventListener('mousedown', handleButtonPress);
@@ -363,6 +365,7 @@
       localStorage.setItem('coins', coins);
       localStorage.setItem('level', level);
       localStorage.setItem('products', JSON.stringify(products));
+      updateLeaderboard(); // Update leaderboard on save
     }
 
     function showCoinAnimation(x, y) {
@@ -385,15 +388,33 @@
       }
     }
 
-    function populateLeaderboard() {
-      leaderboardList.innerHTML = '';
-      let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-      leaderboard.sort((a, b) => b.coins - a.coins);
-      leaderboard.slice(0, 50).forEach((player, index) => {
-        const li = document.createElement('li');
-        li.innerText = `Platz ${index + 1}: @${player.username} Anzahl der Coins: ${player.coins}`;
-        leaderboardList.appendChild(li);
-      });
+    async function populateLeaderboard() {
+      try {
+        const response = await fetch('http://localhost:3000/leaderboard');
+        const data = await response.json();
+        leaderboardList.innerHTML = '';
+        data.forEach((player, index) => {
+          const li = document.createElement('li');
+          li.innerText = `Platz ${index + 1}: @${player.username} Anzahl der Coins: ${player.coins}`;
+          leaderboardList.appendChild(li);
+        });
+      } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+      }
+    }
+
+    async function updateLeaderboard() {
+      try {
+        await fetch('http://localhost:3000/leaderboard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, coins })
+        });
+      } catch (error) {
+        console.error('Error updating leaderboard:', error);
+      }
     }
 
     updateUI();
