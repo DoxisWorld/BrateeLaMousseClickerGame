@@ -184,6 +184,18 @@
       transform: translateX(-50%);
     }
 
+    #activeUsers {
+      position: absolute;
+      top: 2vw;
+      right: 2vw;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+    }
+
     #sideMenu {
       position: fixed;
       top: 0;
@@ -368,6 +380,7 @@
     <button id="menuButton">Menü</button>
     <div class="ui-element" id="coins">Coins: 0 <img src="https://i.postimg.cc/qqR7BRWJ/photo-2024-06-21-23-26-50-removebg-preview-1.png" alt="Coin"></div>
     <div class="ui-element" id="username">@Doxbindatas</div>
+    <div class="ui-element" id="activeUsers">Aktive Benutzer: 0</div>
   </div>
   <div id="score">0</div>
   <div id="button">
@@ -412,6 +425,15 @@
     let soundStarted = false;
     let soundEnabled = true;
     const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
+
+    const ws = new WebSocket('wss://websocket-server-igyzruw3l-lisas-projects-474f1a6d.vercel.app'); // Update this URL
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'activeUsers') {
+        document.getElementById('activeUsers').innerText = 'Aktive Benutzer: ' + data.count;
+      }
+    };
 
     let products = JSON.parse(localStorage.getItem('products')) || [
       {level: 1, cost: 100, increment: 2, autoClick: false},
@@ -714,5 +736,6 @@
   </script>
 </body>
 </html>
+
 
 
