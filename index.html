@@ -408,6 +408,7 @@
     let counter = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
     let coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
     let level = localStorage.getItem('level') ? parseInt(localStorage.getItem('level')) : 1;
+    let soundPlaying = false;
 
     let products = JSON.parse(localStorage.getItem('products')) || [
       {level: 1, cost: 100, increment: 2, autoClick: false},
@@ -430,7 +431,7 @@
       'https://example.com/background10.jpg'
     ];
 
-        const levelUpMessages = [
+    const levelUpMessages = [
       '',
       'Level Up! Du bist jetzt im Level: Mousse auf Kombi',
       'Level Up! Du bist jetzt im Level: 🇩🇪 Mousse Lieferant',
@@ -460,13 +461,13 @@
       checkDailyReward();
     };
 
-    button.addEventListener('mousedown', handleButtonPress);
-    button.addEventListener('mouseup', handleButtonRelease);
-    button.addEventListener('touchstart', handleButtonPress);
-    button.addEventListener('touchend', handleButtonRelease);
+    document.getElementById('button').addEventListener('mousedown', handleButtonPress);
+    document.getElementById('button').addEventListener('mouseup', handleButtonRelease);
+    document.getElementById('button').addEventListener('touchstart', handleButtonPress);
+    document.getElementById('button').addEventListener('touchend', handleButtonRelease);
 
     function handleButtonPress(event) {
-      button.style.transform = 'scale(0.95)';
+      document.getElementById('button').style.transform = 'scale(0.95)';
       const increment = products[0].increment > 1 ? products[0].increment : 1;
       counter += increment;
       coins += increment;
@@ -474,39 +475,41 @@
       saveGame();
       updateUI();
       showCoinAnimation(event.touches ? event.touches[0].clientX : event.clientX, event.touches ? event.touches[0].clientY : event.clientY);
-      playSound();
+      if (!soundPlaying) {
+        playSound();
+      }
     }
 
     function handleButtonRelease() {
-      button.style.transform = 'scale(1)';
+      document.getElementById('button').style.transform = 'scale(1)';
     }
 
-    menuButton.onclick = () => {
-      if (sideMenu.style.left === '0px') {
-        sideMenu.style.left = '-100%';
+    document.getElementById('menuButton').onclick = () => {
+      if (document.getElementById('sideMenu').style.left === '0px') {
+        document.getElementById('sideMenu').style.left = '-100%';
       } else {
-        sideMenu.style.left = '0px';
+        document.getElementById('sideMenu').style.left = '0px';
       }
     };
 
-    sideMenuClose.onclick = () => {
-      sideMenu.style.left = '-100%';
+    document.getElementById('sideMenuClose').onclick = () => {
+      document.getElementById('sideMenu').style.left = '-100%';
     };
 
     document.getElementById('shopButton').onclick = () => {
-      if (shop.style.left === '0px') {
-        shop.style.left = '-100%';
+      if (document.getElementById('shop').style.left === '0px') {
+        document.getElementById('shop').style.left = '-100%';
       } else {
-        shop.style.left = '0px';
+        document.getElementById('shop').style.left = '0px';
       }
     };
 
-    shopClose.onclick = () => {
-      shop.style.left = '-100%';
+    document.getElementById('shopClose').onclick = () => {
+      document.getElementById('shop').style.left = '-100%';
     };
 
-    leaderboardModalClose.onclick = () => {
-      leaderboardModal.style.display = 'none';
+    document.getElementById('leaderboardModalClose').onclick = () => {
+      document.getElementById('leaderboardModal').style.display = 'none';
     };
 
     function checkLevelUp() {
@@ -514,14 +517,14 @@
         level++;
         alert(levelUpMessages[level]);
         document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
-        button.style.animation = 'levelUpAnimation 1s ease-in-out';
+        document.getElementById('button').style.animation = 'levelUpAnimation 1s ease-in-out';
       }
     }
 
     function updateUI() {
-      scoreElem.innerText = counter;
-      coinsElem.innerText = 'Coins: ' + coins;
-      levelElem.innerText = 'Level: ' + level;
+      document.getElementById('score').innerText = counter;
+      document.getElementById('coins').innerText = 'Coins: ' + coins;
+      document.getElementById('level').innerText = 'Level: ' + level;
       document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
       products.forEach((product, index) => {
         const productElem = document.getElementById(`product${index + 1}`);
@@ -539,7 +542,7 @@
     }
 
     function showCoinAnimation(x, y) {
-      const clone = coinAnimation.cloneNode(true);
+      const clone = document.getElementById('coin-animation').cloneNode(true);
       clone.style.left = `${x - 20}px`;
       clone.style.top = `${y - 20}px`;
       clone.style.display = 'block';
@@ -549,20 +552,30 @@
       });
     }
 
-    button.addEventListener('animationend', () => {
-      button.style.animation = '';
+    document.getElementById('button').addEventListener('animationend', () => {
+      document.getElementById('button').style.animation = '';
     });
 
+    function playSound() {
+      soundPlaying = true;
+      const audio = new Audio('path_to_sound_file.mp3');
+      audio.play();
+      audio.addEventListener('ended', () => {
+        soundPlaying = false;
+      });
+    }
+
     function toggleLeaderboard() {
-      if (leaderboardModal.style.display === 'none' || leaderboardModal.style.display === '') {
+      if (document.getElementById('leaderboardModal').style.display === 'none' || document.getElementById('leaderboardModal').style.display === '') {
         populateLeaderboard();
-        leaderboardModal.style.display = 'block';
+        document.getElementById('leaderboardModal').style.display = 'block';
       } else {
-        leaderboardModal.style.display = 'none';
+        document.getElementById('leaderboardModal').style.display = 'none';
       }
     }
 
     function populateLeaderboard() {
+      const leaderboardList = document.getElementById('leaderboardList');
       leaderboardList.innerHTML = '';
       let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
       leaderboard.sort((a, b) => b.coins - a.coins);
@@ -574,13 +587,13 @@
     }
 
     function populateShop() {
+      const shopList = document.getElementById('shopList');
       shopList.innerHTML = '';
       products.forEach((product, index) => {
         const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>Produkt ${index + 1}</strong> - Level: ${product.level}, Kosten: ${product.cost} Coins, <br> Erhöhung: ${product.increment}, <br> Bonus: ${product.bonus || ''}
-          <button id="buyProduct${index + 1}">Kaufen für ${product.cost} Coins</button>
-        `;
+        li.innerHTML = 
+          `<strong>Produkt ${index + 1}</strong> - Level: ${product.level}, Kosten: ${product.cost} Coins, <br> Erhöhung: ${product.increment}, <br> Bonus: ${product.bonus || ''}
+          <button id="buyProduct${index + 1}">Kaufen für ${product.cost} Coins</button>`;
         shopList.appendChild(li);
 
         document.getElementById(`buyProduct${index + 1}`).onclick = () => {
@@ -685,15 +698,15 @@
       const oneDay = 24 * 60 * 60 * 1000;
 
       if (!lastClaimed || now - lastClaimed > oneDay) {
-        dailyReward.style.display = 'block';
+        document.getElementById('dailyReward').style.display = 'block';
       }
     }
 
-    collectRewardButton.onclick = () => {
+    document.getElementById('collectRewardButton').onclick = () => {
       coins += 50;
       saveGame();
       updateUI();
-      dailyReward.style.display = 'none';
+      document.getElementById('dailyReward').style.display = 'none';
       localStorage.setItem('lastClaimed', new Date().getTime());
     };
 
