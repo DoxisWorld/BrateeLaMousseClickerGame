@@ -425,9 +425,9 @@
       'https://preview.redd.it/i42ro4bfzui01.jpg?auto=webp&s=a0cc936a19adb56129f9a7c50ee67f5f9378a536',
       'https://preview.redd.it/top-to-bottom-drysift-la-mousse-two-different-commercials-v0-n2ftecdj49ja1.jpg?auto=webp&s=d1b15da431aefa875b2c0da1ce271b13f71d39d9',
       'https://italialegalweed.com/wp-content/uploads/2023/02/E32C3901-4BAA-4399-83AF-A240EB93DB84.jpeg',
-      'https://cdn.wallpapersafari.com/8/24/C45l8P.jpg',
-      'https://cdn.wallpapersafari.com/1/28/B22f6G.jpg',
-      'https://example.com/background6.jpg',
+      'https://th.bing.com/th/id/OIP.8SDDEM9tiVINDKAWr5KjCQHaJ4',
+      'https://cannabisman.fr/wp-content/uploads/2018/09/marble-hash-1.jpg',
+      'https://p.globalsources.com/IMAGES/PDT/B1176556832/Moroccan-Caramello-Hash.jpg',
       'https://example.com/background7.jpg',
       'https://example.com/background8.jpg',
       'https://example.com/background9.jpg',
@@ -592,7 +592,7 @@
       products.forEach((product, index) => {
         const li = document.createElement('li');
         li.innerHTML = 
-          `<strong>Produkt ${index + 1}</strong> - Level: ${product.level}, Kosten: ${product.cost} Coins, <br> Erhöhung: ${product.increment}, <br> Bonus: ${product.bonus || ''}
+          `<strong>La Mousse ${index + 1}</strong> - Level: ${product.level}, Kosten: ${product.cost} Coins, <br> Erhöhung: ${product.increment}, <br> Bonus: ${product.bonus || ''}
           <button id="buyProduct${index + 1}">Kaufen für ${product.cost} Coins</button>`;
         shopList.appendChild(li);
 
@@ -646,7 +646,7 @@
     function inviteFriend() {
       const link = `https://t.me/DoxisGameBot/BrateeLaMousse?ref=${username}`;
       navigator.clipboard.writeText(link).then(() => {
-        alert('Einladungslink wurde kopiert! Teile ihn mit deinen Freunden.');
+        alert('Einladungslink wurde kopiert! Schick ihn in Gruppen, damit du durch die Einladungen viele La Mousse Coins erhälst');
       }, (err) => {
         console.error('Fehler beim Kopieren des Einladungslinks: ', err);
       });
