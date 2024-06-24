@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
-    /* Vorhandene CSS-Styles */
     @keyframes coinAnimation {
       0% {
         opacity: 1;
@@ -189,7 +188,7 @@
       position: fixed;
       top: 0;
       left: -100%;
-      width: 250px;
+      width: 300px;
       height: 100%;
       background-color: rgba(255, 255, 255, 0.9);
       box-shadow: 2px 0 5px rgba(0,0,0,0.5);
@@ -258,6 +257,16 @@
       border-bottom: 1px solid rgba(0,0,0,0.1);
     }
 
+    #leaderboardModalClose {
+      position: absolute;
+      top: 1vw;
+      right: 1vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+    }
+
     #shop {
       position: fixed;
       top: 0;
@@ -292,7 +301,7 @@
     }
 
     #shop button {
-      background-color: rgba(0, 0, 255, 0.7);
+      background-color: rgba(0, 255, 0, 0.7);
       border: none;
       border-radius: 1vw;
       padding: 1vw 2vw;
@@ -302,6 +311,11 @@
       cursor: pointer;
       margin: 1vw auto;
       display: block;
+      transition: background-color 0.3s;
+    }
+
+    #shop button:hover {
+      background-color: rgba(0, 200, 0, 0.7);
     }
 
     #shopClose {
@@ -339,6 +353,11 @@
       color: white;
       cursor: pointer;
       margin-top: 2vw;
+      transition: background-color 0.3s;
+    }
+
+    #dailyReward button:hover {
+      background-color: rgba(0, 200, 0, 0.7);
     }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -356,7 +375,7 @@
     <span>Hau Ihn</span>
   </div>
   <div id="coin-animation"></div>
-  <button id="playSoundButton" onclick="toggleSound()">Sound Abspielen</button>
+  <button id="playSoundButton" onclick="toggleSound()">Sound Ausschalten</button>
   <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
   <button id="saveButton" onclick="saveGame()">Speichern</button>
   <button id="inviteFriendButton" onclick="inviteFriend()">Freund Einladen</button>
@@ -367,6 +386,7 @@
   </div>
   <div id="leaderboardModal">
     <h2>Bestenliste</h2>
+    <span id="leaderboardModalClose">✖</span>
     <ul id="leaderboardList"></ul>
   </div>
   <div id="shop">
@@ -391,9 +411,9 @@
 
     let products = JSON.parse(localStorage.getItem('products')) || [
       {level: 1, cost: 100, increment: 2, autoClick: false},
-      {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null},
-      {level: 1, cost: 300, increment: 0, autoClick: false},
-      {level: 1, cost: 400, increment: 0, autoClick: false}
+      {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null, bonus: 'Doppelte Münzen für 10 Sekunden'},
+      {level: 1, cost: 300, increment: 0, autoClick: false, bonus: 'Erhalte zufällige Münzgewinne'},
+      {level: 1, cost: 400, increment: 0, autoClick: false, bonus: 'Reduziert Upgrade-Kosten um 10%'}
     ];
 
     const levelThresholds = [250, 1000, 5000, 12500, 20000, 30000, 40000, 50000, 60000, 70000];
@@ -410,36 +430,18 @@
       'https://example.com/background10.jpg'
     ];
 
-    const button = document.getElementById('button');
-    const scoreElem = document.getElementById('score');
-    const coinsElem = document.getElementById('coins');
-    const levelElem = document.getElementById('level');
-    const playSoundButton = document.getElementById('playSoundButton');
-    const menuButton = document.getElementById('menuButton');
-    const sideMenu = document.getElementById('sideMenu');
-    const coinAnimation = document.getElementById('coin-animation');
-    const leaderboardModal = document.getElementById('leaderboardModal');
-    const leaderboardList = document.getElementById('leaderboardList');
-    const shop = document.getElementById('shop');
-    const shopList = document.getElementById('shopList');
-    const sideMenuClose = document.getElementById('sideMenuClose');
-    const shopClose = document.getElementById('shopClose');
-    const dailyReward = document.getElementById('dailyReward');
-    const collectRewardButton = document.getElementById('collectRewardButton');
-
-    let soundEnabled = true;
-    const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
-
-    function playSound() {
-        if (soundEnabled && audio.paused) {
-            audio.play();
-        }
-    }
-
-    function toggleSound() {
-        soundEnabled = !soundEnabled;
-        playSoundButton.innerText = soundEnabled ? 'Sound Ausschalten' : 'Sound Einschalten';
-    }
+        const levelUpMessages = [
+      '',
+      'Level Up! Du bist jetzt im Level: Mousse auf Kombi',
+      'Level Up! Du bist jetzt im Level: 🇩🇪 Mousse Lieferant',
+      'Level Up! Du bist jetzt im Level: Mousse Anführer',
+      'Level Up! Du bist jetzt im Level: Dry Raucher',
+      'Level Up! Du bist jetzt im Level: Mousse Händler',
+      'Level Up! Du bist jetzt im Level: Mousse King',
+      'Level Up! Du bist jetzt im Level: Mousse Kaiser',
+      'Level Up! Du bist jetzt im Level: Mousse Imperator',
+      'Level Up! Du bist jetzt im Level: Mousse Gott'
+    ];
 
     window.onload = function() {
       products.forEach((product, index) => {
@@ -503,10 +505,14 @@
       shop.style.left = '-100%';
     };
 
+    leaderboardModalClose.onclick = () => {
+      leaderboardModal.style.display = 'none';
+    };
+
     function checkLevelUp() {
       if (level < levelThresholds.length && counter >= levelThresholds[level]) {
         level++;
-        alert('Level Up! Du bist jetzt auf Level ' + level);
+        alert(levelUpMessages[level]);
         document.body.style.backgroundImage = `url(${backgrounds[level - 1]})`;
         button.style.animation = 'levelUpAnimation 1s ease-in-out';
       }
@@ -520,7 +526,7 @@
       products.forEach((product, index) => {
         const productElem = document.getElementById(`product${index + 1}`);
         if (productElem) {
-          productElem.querySelector('button').innerText = `Lvl. ${product.level} | ${product.cost} Coins`;
+          productElem.querySelector('button').innerText = `Lvl. ${product.level} | ${product.cost} Coins | ${product.bonus || ''}`;
         }
       });
     }
@@ -571,15 +577,18 @@
       shopList.innerHTML = '';
       products.forEach((product, index) => {
         const li = document.createElement('li');
-        li.innerText = `Produkt ${index + 1} - Level: ${product.level}, Kosten: ${product.cost} Coins, Erhöhung: ${product.increment}`;
-        const button = document.createElement('button');
-        button.innerText = `Kaufen für ${product.cost} Coins`;
-        button.onclick = () => {
+        li.innerHTML = `
+          <strong>Produkt ${index + 1}</strong> - Level: ${product.level}, Kosten: ${product.cost} Coins, <br> Erhöhung: ${product.increment}, <br> Bonus: ${product.bonus || ''}
+          <button id="buyProduct${index + 1}">Kaufen für ${product.cost} Coins</button>
+        `;
+        shopList.appendChild(li);
+
+        document.getElementById(`buyProduct${index + 1}`).onclick = () => {
           if (coins >= product.cost) {
             coins -= product.cost;
             product.level++;
-            product.cost = Math.floor(product.cost * 1.5); // Cost increases by 50% each level
-            product.increment += 1; // Increment increases by 1 each level
+            product.cost = Math.floor(product.cost * 1.5);
+            product.increment += 1;
             if (product.autoClick && !product.autoClickId) {
               product.autoClickId = setInterval(() => {
                 counter += product.increment;
@@ -588,16 +597,37 @@
                 updateUI();
               }, product.interval);
             }
+            if (product.bonus) {
+              applyProductBonus(product);
+            }
             saveGame();
             updateUI();
-            populateShop(); // Update the shop list to reflect new costs and levels
+            populateShop();
           } else {
             alert('Nicht genug Coins!');
           }
         };
-        li.appendChild(button);
-        shopList.appendChild(li);
       });
+    }
+
+    function applyProductBonus(product) {
+      if (product.bonus === 'Doppelte Münzen für 10 Sekunden') {
+        const originalIncrement = products[0].increment;
+        products[0].increment *= 2;
+        setTimeout(() => {
+          products[0].increment = originalIncrement;
+        }, 10000);
+      } else if (product.bonus === 'Erhalte zufällige Münzgewinne') {
+        setInterval(() => {
+          const randomCoins = Math.floor(Math.random() * 100);
+          coins += randomCoins;
+          updateUI();
+        }, 5000);
+      } else if (product.bonus === 'Reduziert Upgrade-Kosten um 10%') {
+        products.forEach(prod => {
+          prod.cost = Math.floor(prod.cost * 0.9);
+        });
+      }
     }
 
     function inviteFriend() {
@@ -623,7 +653,6 @@
     }
 
     function notifyFriendJoined(referrerUsername) {
-      // Simulate friend joining after some time
       setTimeout(() => {
         let joins = JSON.parse(localStorage.getItem('joins'));
         if (joins && !joins[referrerUsername]) {
@@ -632,7 +661,7 @@
           alert(`Dein Freund @${referrerUsername} ist dem Spiel beigetreten!`);
           awardReferralBonus(referrerUsername);
         }
-      }, 5000); // Simulate delay for friend joining
+      }, 5000);
     }
 
     function awardReferralBonus(referrerUsername) {
@@ -640,7 +669,7 @@
       if (!referrers[referrerUsername]) {
         referrers[referrerUsername] = 0;
       }
-      referrers[referrerUsername] += 200; // Award 200 coins
+      referrers[referrerUsername] += 200;
       localStorage.setItem('referrers', JSON.stringify(referrers));
       if (referrerUsername === username) {
         coins += 200;
@@ -661,7 +690,7 @@
     }
 
     collectRewardButton.onclick = () => {
-      coins += 50; // Daily reward of 50 coins
+      coins += 50;
       saveGame();
       updateUI();
       dailyReward.style.display = 'none';
