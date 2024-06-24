@@ -426,7 +426,7 @@
     let soundEnabled = true;
     const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
 
-    const ws = new WebSocket('wss://websocket-server-igyzruw3l-lisas-projects-474f1a6d.vercel.app'); // Update this URL
+    const ws = new WebSocket('wss://websocket-server-igyzruw3l-lisas-projects-474f1a6d.vercel.app'); // Aktualisierte URL
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -736,6 +736,7 @@
   </script>
 </body>
 </html>
+
 
 
 
