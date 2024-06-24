@@ -410,7 +410,8 @@
     let level = localStorage.getItem('level') ? parseInt(localStorage.getItem('level')) : 1;
     let soundPlaying = false;
     let soundStarted = false;
-    let audio = null;
+    let soundEnabled = true;
+    const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
 
     let products = JSON.parse(localStorage.getItem('products')) || [
       {level: 1, cost: 100, increment: 2, autoClick: false},
@@ -559,11 +560,9 @@
     });
 
     function playSound() {
-      soundPlaying = true;
-      soundStarted = true;
-      audio = new Audio('https://www.dropbox.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=xo3959j7&dl=1');
-      audio.loop = true;
-      audio.play();
+      if (soundEnabled && audio.paused) {
+        audio.play();
+      }
     }
 
     function toggleLeaderboard() {
