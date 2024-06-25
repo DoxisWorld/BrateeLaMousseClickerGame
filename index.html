@@ -480,27 +480,27 @@
     <span id="musicMenuClose">✖</span>
     <div class="music-item">
       <span>Song 1</span>
-      <button onclick="playSong('song1')">Play</button>
+      <button onclick="playSong('C H O CNWfeat CNW 16 bars')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
     <div class="music-item">
       <span>Song 2</span>
-      <button onclick="playSong('song2')">Play</button>
+      <button onclick="playSong('Bus1nezz biz')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
     <div class="music-item">
       <span>Song 3</span>
-      <button onclick="playSong('song3')">Play</button>
+      <button onclick="playSong('CC crimeNET Szene Track 2015 HQ')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
     <div class="music-item">
       <span>Song 4</span>
-      <button onclick="playSong('song4')">Play</button>
+      <button onclick="playSong('Bratee ein Tabak Pape Kiffer')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
     <div class="music-item">
       <span>Song 5</span>
-      <button onclick="playSong('song5')">Play</button>
+      <button onclick="playSong('Bob Marley Buffalo soldier')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
   </div>
@@ -518,11 +518,11 @@
     let soundEnabled = true;
     let currentAudio = null;
     const songs = {
-      song1: new Audio('https://dl.dropboxusercontent.com/s/y9firxxgd2eqzb1/C-H-O-CNWfeat-CNW-16-bars.mp3'),
-      song2: new Audio('https://dl.dropboxusercontent.com/s/1io0txhr39zlgbo/Bus1nezz-biz.mp3'),
-      song3: new Audio('https://dl.dropboxusercontent.com/s/n96l7vgtde12s60/CC-crimeNET-Szene-Track-2015-HQ-1.mp3'),
-      song4: new Audio('https://dl.dropboxusercontent.com/s/hyju8t3at71wdgk/Bratee-ein-Tabak-Pape-Kiffer.mp3'),
-      song5: new Audio('https://dl.dropboxusercontent.com/s/iv1rjs6mqk2qvhk/Bob-Marley-Buffalo-soldier.mp3')
+      song1: new Audio('https://dl.dropboxusercontent.com/scl/fi/y9firxxgd2eqzb1i4rq5x/C-H-O-CNWfeat-CNW-16-bars.mp3?rlkey=3qtad6n3jk116e9dc6t0giu4d&st=q2zfoko1&dl=0'),
+      song2: new Audio('https://dl.dropboxusercontent.com/scl/fi/1io0txhr39zlgbocx65lt/Bus1nezz-biz.mp3?rlkey=jcsg4wxf4euzg65rgzw0urd41&st=cfc8sl92&dl=0'),
+      song3: new Audio('https://dl.dropboxusercontent.com/scl/fi/n96l7vgtde12s60168hf3/CC-crimeNET-Szene-Track-2015-HQ-1.mp3?rlkey=2hgpku4i44f7bfp04xr9sgjn1&st=v4lqagop&dl=0'),
+      song4: new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=4i56uw9a&dl=0'),
+      song5: new Audio('https://dl.dropboxusercontent.com/scl/fi/iv1rjs6mqk2qvhk8d9d30/Bob-Marley-Buffalo-soldier.mp3?rlkey=4eucz565t13prewvr3wcku1o4&st=3vfyi1gt&dl=0')
     };
 
     // Ensure all Audio elements can play on mobile by enabling touch start interaction
@@ -851,11 +851,16 @@
     }
 
     function playSong(songId) {
-      if (currentAudio && !currentAudio.paused) {
-        currentAudio.pause();
+      const song = songs[songId];
+      if (song) {
+        if (currentAudio && !currentAudio.paused) {
+          currentAudio.pause();
+        }
+        currentAudio = song;
+        currentAudio.play().catch(error => console.error('Audio playback failed:', error, song.src));
+      } else {
+        console.error('Song not found:', songId);
       }
-      currentAudio = songs[songId];
-      currentAudio.play().catch(error => console.error('Audio playback failed:', error));
     }
 
     function pauseSong() {
@@ -868,8 +873,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
