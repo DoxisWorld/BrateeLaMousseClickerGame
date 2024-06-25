@@ -437,77 +437,107 @@
       color: black;
       cursor: pointer;
     }
+
+    #videoContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #gameContainer {
+      display: none;
+    }
+
+    #introVideo {
+      width: 100%;
+      height: auto;
+    }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <div id="ui">
-    <div class="ui-element" id="level">Level: 1</div>
-    <button id="menuButton">Menü</button>
-    <div class="ui-element" id="coins">Coins: 0 <img src="https://i.postimg.cc/JhKtFTn1/IMG-1271.png" alt="Coin"></div>
-    <div class="ui-element" id="username">@Doxbindatas</div>
+  <div id="videoContainer">
+    <video id="introVideo" src="https://dl.dropboxusercontent.com/scl/fi/uenpo4r1b4ljyl07eukna/Design-ohne-Titel.mp4?rlkey=6fv855ixz0hw6b6wgi4bpjtgt&st=gg6cv1km&dl=0" autoplay></video>
   </div>
-  <div id="score">0</div>
-  <div id="button">
-    <img src="https://i.postimg.cc/JhKtFTn1/IMG-1271.png" alt="">
-    <span></span>
-  </div>
-  <div id="coin-animation"></div>
-  <button id="playSoundButton" onclick="toggleSound()">Sound Ausschalten</button>
-  <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
-  <button id="saveButton" onclick="saveGame()">Speichern</button>
-  <button id="inviteFriendButton" onclick="inviteFriend()">Freunde Einladen</button>
-  <button id="musicButton" onclick="toggleMusicMenu()">Musik</button>
+  
+  <div id="gameContainer">
+    <div id="ui">
+      <div class="ui-element" id="level">Level: 1</div>
+      <button id="menuButton">Menü</button>
+      <div class="ui-element" id="coins">Coins: 0 <img src="https://i.postimg.cc/JhKtFTn1/IMG-1271.png" alt="Coin"></div>
+      <div class="ui-element" id="username">@Doxbindatas</div>
+    </div>
+    <div id="score">0</div>
+    <div id="button">
+      <img src="https://i.postimg.cc/JhKtFTn1/IMG-1271.png" alt="">
+      <span></span>
+    </div>
+    <div id="coin-animation"></div>
+    <button id="playSoundButton" onclick="toggleSound()">Sound Ausschalten</button>
+    <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
+    <button id="saveButton" onclick="saveGame()">Speichern</button>
+    <button id="inviteFriendButton" onclick="inviteFriend()">Freunde Einladen</button>
+    <button id="musicButton" onclick="toggleMusicMenu()">Musik</button>
 
-  <div id="sideMenu">
-    <span id="sideMenuClose">✖</span>
-    <a href="#" id="shopButton">Shop</a>
-  </div>
-  <div id="leaderboardModal">
-    <h2>Bestenliste</h2>
-    <span id="leaderboardModalClose">✖</span>
-    <ul id="leaderboardList"></ul>
-  </div>
-  <div id="shop">
-    <span id="shopClose">✖</span>
-    <h2>Shop</h2>
-    <ul id="shopList"></ul>
-  </div>
-  <div id="dailyReward">
-    <h2>Tägliche Belohnung</h2>
-    <p>Herzlichen Glückwunsch! Du hast deine tägliche Belohnung erhalten.</p>
-    <button id="collectRewardButton">Belohnung Einsammeln</button>
-  </div>
-  <div id="musicMenu">
-    <h2>Musik Menü</h2>
-    <span id="musicMenuClose">✖</span>
-    <div class="music-item">
-      <span>C H O CNWfeat CNW 16 bars</span>
-      <button onclick="playSong('song1')">Play</button>
-      <button onclick="pauseSong()">Pause</button>
+    <div id="sideMenu">
+      <span id="sideMenuClose">✖</span>
+      <a href="#" id="shopButton">Shop</a>
     </div>
-    <div class="music-item">
-      <span>Bus1nezz biz</span>
-      <button onclick="playSong('song2')">Play</button>
-      <button onclick="pauseSong()">Pause</button>
+    <div id="leaderboardModal">
+      <h2>Bestenliste</h2>
+      <span id="leaderboardModalClose">✖</span>
+      <ul id="leaderboardList"></ul>
     </div>
-    <div class="music-item">
-      <span>CC crimeNET Szene Track</span>
-      <button onclick="playSong('song3')">Play</button>
-      <button onclick="pauseSong()">Pause</button>
+    <div id="shop">
+      <span id="shopClose">✖</span>
+      <h2>Shop</h2>
+      <ul id="shopList"></ul>
     </div>
-    <div class="music-item">
-      <span>Bratee ein Tabak Pape Kiffer</span>
-      <button onclick="playSong('song4')">Play</button>
-      <button onclick="pauseSong()">Pause</button>
+    <div id="dailyReward">
+      <h2>Tägliche Belohnung</h2>
+      <p>Herzlichen Glückwunsch! Du hast deine tägliche Belohnung erhalten.</p>
+      <button id="collectRewardButton">Belohnung Einsammeln</button>
     </div>
-    <div class="music-item">
-      <span>Bob Marley Buffalo soldier</span>
-      <button onclick="playSong('song5')">Play</button>
-      <button onclick="pauseSong()">Pause</button>
+    <div id="musicMenu">
+      <h2>Musik Menü</h2>
+      <span id="musicMenuClose">✖</span>
+      <div class="music-item">
+        <span>C H O CNWfeat CNW 16 bars</span>
+        <button onclick="playSong('song1')">Play</button>
+        <button onclick="pauseSong()">Pause</button>
+      </div>
+      <div class="music-item">
+        <span>Bus1nezz biz</span>
+        <button onclick="playSong('song2')">Play</button>
+        <button onclick="pauseSong()">Pause</button>
+      </div>
+      <div class="music-item">
+        <span>CC crimeNET Szene Track</span>
+        <button onclick="playSong('song3')">Play</button>
+        <button onclick="pauseSong()">Pause</button>
+      </div>
+      <div class="music-item">
+        <span>Bratee ein Tabak Pape Kiffer</span>
+        <button onclick="playSong('song4')">Play</button>
+        <button onclick="pauseSong()">Pause</button>
+      </div>
+      <div class="music-item">
+        <span>Bob Marley Buffalo soldier</span>
+        <button onclick="playSong('song5')">Play</button>
+        <button onclick="pauseSong()">Pause</button>
+      </div>
     </div>
   </div>
+
   <script>
+    // Dein bestehender JavaScript-Code
     Telegram.WebApp.ready();
     const tg = window.Telegram.WebApp;
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Unknown User';
@@ -605,6 +635,13 @@
       updateUI();
       populateShop();
       checkDailyReward();
+
+      // Video-Event-Listener hinzufügen
+      const video = document.getElementById('introVideo');
+      video.onended = () => {
+        document.getElementById('videoContainer').style.display = 'none';
+        document.getElementById('gameContainer').style.display = 'block';
+      };
     };
 
     document.getElementById('button').addEventListener('mousedown', handleButtonPress);
@@ -884,4 +921,5 @@
   </script>
 </body>
 </html>
+
 
