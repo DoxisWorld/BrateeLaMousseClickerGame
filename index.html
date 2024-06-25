@@ -128,7 +128,7 @@
       display: none;
     }
 
-    #playSoundButton, #leaderboardButton, #saveButton, #inviteFriendButton {
+    #playSoundButton, #leaderboardButton, #saveButton, #inviteFriendButton, #musicButton {
       background-color: rgba(255, 255, 255, 0.5);
       border: none;
       border-radius: 1vw;
@@ -152,7 +152,7 @@
       right: 2vw;
     }
 
-    #saveButton, #inviteFriendButton {
+    #saveButton, #inviteFriendButton, #musicButton {
       position: absolute;
       bottom: 18vw;
       right: 2vw;
@@ -160,6 +160,10 @@
 
     #inviteFriendButton {
       bottom: 26vw;
+    }
+
+    #musicButton {
+      bottom: 34vw;
     }
 
     #menuButton {
@@ -371,6 +375,65 @@
     #dailyReward button:hover {
       background-color: rgba(0, 200, 0, 0.7);
     }
+
+    #musicMenu {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80vw;
+      height: 80vh;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 1vw;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      overflow: auto;
+      padding: 2vw;
+      box-sizing: border-box;
+      z-index: 6;
+    }
+
+    #musicMenu h2 {
+      text-align: center;
+      font-size: 3.5vw;
+      margin-bottom: 2vw;
+    }
+
+    #musicMenu .music-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 2.5vw;
+      padding: 1vw 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    #musicMenu button {
+      background-color: rgba(0, 255, 0, 0.7);
+      border: none;
+      border-radius: 1vw;
+      padding: 1vw 2vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      margin-left: 1vw;
+      transition: background-color 0.3s;
+    }
+
+    #musicMenu button:hover {
+      background-color: rgba(0, 200, 0, 0.7);
+    }
+
+    #musicMenuClose {
+      position: absolute;
+      top: 1vw;
+      right: 1vw;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+    }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -380,7 +443,6 @@
     <button id="menuButton">Menü</button>
     <div class="ui-element" id="coins">Coins: 0 <img src="https://i.postimg.cc/JhKtFTn1/IMG-1271.png" alt="Coin"></div>
     <div class="ui-element" id="username">@Doxbindatas</div>
-    <div class="ui-element" id="activeUsers">Aktive Benutzer: 0</div>
   </div>
   <div id="score">0</div>
   <div id="button">
@@ -391,7 +453,8 @@
   <button id="playSoundButton" onclick="toggleSound()">Sound Ausschalten</button>
   <button id="leaderboardButton" onclick="toggleLeaderboard()">Bestenliste</button>
   <button id="saveButton" onclick="saveGame()">Speichern</button>
-  <button id="inviteFriendButton" onclick="inviteFriend()">Freund Einladen</button>
+  <button id="inviteFriendButton" onclick="inviteFriend()">Freunde Einladen</button>
+  <button id="musicButton" onclick="toggleMusicMenu()">Musik</button>
 
   <div id="sideMenu">
     <span id="sideMenuClose">✖</span>
@@ -412,6 +475,35 @@
     <p>Herzlichen Glückwunsch! Du hast deine tägliche Belohnung erhalten.</p>
     <button id="collectRewardButton">Belohnung Einsammeln</button>
   </div>
+  <div id="musicMenu">
+    <h2>Musik Menü</h2>
+    <span id="musicMenuClose">✖</span>
+    <div class="music-item">
+      <span>Song 1</span>
+      <button onclick="playSong('song1')">Play</button>
+      <button onclick="pauseSong()">Pause</button>
+    </div>
+    <div class="music-item">
+      <span>Song 2</span>
+      <button onclick="playSong('song2')">Play</button>
+      <button onclick="pauseSong()">Pause</button>
+    </div>
+    <div class="music-item">
+      <span>Song 3</span>
+      <button onclick="playSong('song3')">Play</button>
+      <button onclick="pauseSong()">Pause</button>
+    </div>
+    <div class="music-item">
+      <span>Song 4</span>
+      <button onclick="playSong('song4')">Play</button>
+      <button onclick="pauseSong()">Pause</button>
+    </div>
+    <div class="music-item">
+      <span>Song 5</span>
+      <button onclick="playSong('song5')">Play</button>
+      <button onclick="pauseSong()">Pause</button>
+    </div>
+  </div>
   <script>
     Telegram.WebApp.ready();
     const tg = window.Telegram.WebApp;
@@ -424,15 +516,13 @@
     let soundPlaying = false;
     let soundStarted = false;
     let soundEnabled = true;
-    const audio = new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=464nv6eq&dl=0');
-
-    const ws = new WebSocket('wss://websocket-server-k5snngndf-lisas-projects-474f1a6d.vercel.app'); // Aktualisierte URL
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'activeUsers') {
-        document.getElementById('activeUsers').innerText = 'Aktive Benutzer: ' + data.count;
-      }
+    let currentAudio = null;
+    const songs = {
+      song1: new Audio('https://www.dropbox.com/scl/fi/y9firxxgd2eqzb1i4rq5x/C-H-O-CNWfeat-CNW-16-bars.mp3?rlkey=3qtad6n3jk116e9dc6t0giu4d&st=zr9brfuv&dl=1'),
+      song2: new Audio('https://www.dropbox.com/scl/fi/1io0txhr39zlgbocx65lt/Bus1nezz-biz.mp3?rlkey=jcsg4wxf4euzg65rgzw0urd41&st=wbgp37ns&dl=1'),
+      song3: new Audio('https://www.dropbox.com/scl/fi/n96l7vgtde12s60168hf3/CC-crimeNET-Szene-Track-2015-HQ-1.mp3?rlkey=2hgpku4i44f7bfp04xr9sgjn1&st=mdcafhj3&dl=1'),
+      song4: new Audio('https://www.dropbox.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=r7ahxipn&dl=1'),
+      song5: new Audio('https://www.dropbox.com/scl/fi/iv1rjs6mqk2qvhk8d9d30/Bob-Marley-Buffalo-soldier.mp3?rlkey=4eucz565t13prewvr3wcku1o4&st=eqrjjrty&dl=1')
     };
 
     let products = JSON.parse(localStorage.getItem('products')) || [
@@ -446,8 +536,8 @@
     const backgrounds = [
       'https://www.whatspaper.com/wp-content/uploads/2023/09/scooby-doo-wallpaper-whatspaper-10.jpg',
       'https://wallpapercave.com/wp/wp7468173.jpg',
-      'https://wallpapercave.com/wp/wp4577920.jpg',
-      'https://wallpaper.dog/large/10851111.jpg',
+      'https://m.media-amazon.com/images/I/61skScvD1UL._AC_SL1000_.jpg',
+      'https://files.cults3d.com/uploaders/23891584/illustration-file/3f3b9827-b249-45c5-8da9-4798f4cfece1/cannabis-1.png',
       'https://wallpaperaccess.com/full/2351158.jpg',
       'https://wallpapercave.com/wp/wp4815885.jpg',
       'https://www.cannabisenligne.net/wp-content/uploads/2018/04/photo_2020-09-29_10-17-02-886x1024.jpg',
@@ -468,7 +558,7 @@
 
     const levelUpMessages = [
       '',
-      'Level Up! Du bist jetzt im Level: Mousse auf Kombi',
+      'Level Up! Du bist jetzt im Level: Standart Kiffer',
       'Level Up! Du bist jetzt im Level: 🇩🇪 Mousse Lieferant',
       'Level Up! Du bist jetzt im Level: Mousse Anführer',
       'Level Up! Du bist jetzt im Level: Dry Raucher',
@@ -521,9 +611,6 @@
       saveGame();
       updateUI();
       showCoinAnimation(event.touches ? event.touches[0].clientX : event.clientX, event.touches ? event.touches[0].clientY : event.clientY);
-      if (!soundPlaying && !soundStarted) {
-        playSound();
-      }
     }
 
     function handleButtonRelease() {
@@ -601,12 +688,6 @@
     document.getElementById('button').addEventListener('animationend', () => {
       document.getElementById('button').style.animation = '';
     });
-
-    function playSound() {
-      if (soundEnabled && audio.paused) {
-        audio.play();
-      }
-    }
 
     function toggleLeaderboard() {
       if (document.getElementById('leaderboardModal').style.display === 'none' || document.getElementById('leaderboardModal').style.display === '') {
@@ -687,7 +768,7 @@
     }
 
     function inviteFriend() {
-      const link = `https://t.me/DoxisGameBot/BrateeLaMousse?ref=${username}`;
+      const link = `https://t.me/DoxisGameBot/DrugzClicker?ref=${username}`;
       navigator.clipboard.writeText(link).then(() => {
         alert('Einladungslink wurde kopiert! Schick ihn in Gruppen, damit du durch die Einladungen viele La Mousse Coins erhälst');
       }, (err) => {
@@ -753,7 +834,31 @@
       localStorage.setItem('lastClaimed', new Date().getTime());
     };
 
+    document.getElementById('musicMenuClose').onclick = () => {
+      document.getElementById('musicMenu').style.display = 'none';
+    };
+
+    function toggleMusicMenu() {
+      const musicMenu = document.getElementById('musicMenu');
+      musicMenu.style.display = (musicMenu.style.display === 'none' || musicMenu.style.display === '') ? 'block' : 'none';
+    }
+
+    function playSong(songId) {
+      if (currentAudio && !currentAudio.paused) {
+        currentAudio.pause();
+      }
+      currentAudio = songs[songId];
+      currentAudio.play();
+    }
+
+    function pauseSong() {
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+    }
+
     updateUI();
   </script>
 </body>
 </html>
+
