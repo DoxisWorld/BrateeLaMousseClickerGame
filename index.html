@@ -518,11 +518,11 @@
     let soundEnabled = true;
     let currentAudio = null;
     const songs = {
-      song1: new Audio('https://dl.dropboxusercontent.com/s/y9firxxgd2eqzb1i4rq5x/C-H-O-CNWfeat-CNW-16-bars.mp3'),
-      song2: new Audio('https://dl.dropboxusercontent.com/s/1io0txhr39zlgbocx65lt/Bus1nezz-biz.mp3'),
-      song3: new Audio('https://dl.dropboxusercontent.com/s/n96l7vgtde12s60168hf3/CC-crimeNET-Szene-Track-2015-HQ-1.mp3'),
-      song4: new Audio('https://dl.dropboxusercontent.com/s/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3'),
-      song5: new Audio('https://dl.dropboxusercontent.com/s/iv1rjs6mqk2qvhk8d9d30/Bob-Marley-Buffalo-soldier.mp3')
+      song1: new Audio('https://dl.dropboxusercontent.com/s/y9firxxgd2eqzb1/C-H-O-CNWfeat-CNW-16-bars.mp3'),
+      song2: new Audio('https://dl.dropboxusercontent.com/s/1io0txhr39zlgbo/Bus1nezz-biz.mp3'),
+      song3: new Audio('https://dl.dropboxusercontent.com/s/n96l7vgtde12s60/CC-crimeNET-Szene-Track-2015-HQ-1.mp3'),
+      song4: new Audio('https://dl.dropboxusercontent.com/s/hyju8t3at71wdgk/Bratee-ein-Tabak-Pape-Kiffer.mp3'),
+      song5: new Audio('https://dl.dropboxusercontent.com/s/iv1rjs6mqk2qvhk/Bob-Marley-Buffalo-soldier.mp3')
     };
 
     // Ensure all Audio elements can play on mobile by enabling touch start interaction
@@ -855,7 +855,7 @@
         currentAudio.pause();
       }
       currentAudio = songs[songId];
-      currentAudio.play();
+      currentAudio.play().catch(error => console.error('Audio playback failed:', error));
     }
 
     function pauseSong() {
@@ -868,6 +868,7 @@
   </script>
 </body>
 </html>
+
 
 
 
