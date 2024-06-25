@@ -525,6 +525,13 @@
       song5: new Audio('https://dl.dropboxusercontent.com/s/iv1rjs6mqk2qvhk8d9d30/Bob-Marley-Buffalo-soldier.mp3')
     };
 
+    // Ensure all Audio elements can play on mobile by enabling touch start interaction
+    document.body.addEventListener('touchstart', function() {
+      Object.values(songs).forEach(audio => {
+        audio.load();
+      });
+    }, { once: true });
+
     let products = JSON.parse(localStorage.getItem('products')) || [
       {level: 1, cost: 100, increment: 2, autoClick: false},
       {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null, bonus: 'Doppelte Münzen für 10 Sekunden'},
@@ -715,8 +722,8 @@
       shopList.innerHTML = '';
       products.forEach((product, index) => {
         const li = document.createElement('li');
-        li.innerHTML = 
-          `<strong>La Mousse ${index + 1}</strong> - Level: ${product.level}, Kosten: ${product.cost} Coins, <br> Erhöhung: ${product.increment}, <br> Bonus: ${product.bonus || ''}
+        li.innerHTML = `
+          <strong>La Mousse ${index + 1}</strong> - Level: ${product.level}, Kosten: ${product.cost} Coins, <br> Erhöhung: ${product.increment}, <br> Bonus: ${product.bonus || ''}
           <button id="buyProduct${index + 1}">Kaufen für ${product.cost} Coins</button>`;
         shopList.appendChild(li);
 
@@ -861,6 +868,7 @@
   </script>
 </body>
 </html>
+
 
 
 
