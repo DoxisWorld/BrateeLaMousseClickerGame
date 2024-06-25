@@ -55,6 +55,7 @@
       top: 0;
       left: 0;
       z-index: 2;
+      pointer-events: none; /* Ensure the UI doesn't block clicks */
     }
 
     .ui-element {
@@ -66,6 +67,7 @@
       color: black;
       display: inline-flex;
       align-items: center;
+      pointer-events: auto; /* Ensure the UI elements are clickable */
     }
 
     .ui-element img {
@@ -97,6 +99,7 @@
       justify-content: center;
       margin: 2vw auto;
       transition: transform 0.1s;
+      pointer-events: auto; /* Ensure the button is clickable */
     }
 
     #button img {
@@ -480,27 +483,27 @@
     <span id="musicMenuClose">✖</span>
     <div class="music-item">
       <span>Song 1</span>
-      <button onclick="playSong('C H O CNWfeat CNW 16 bars')">Play</button>
+      <button onclick="playSong('song1')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
     <div class="music-item">
       <span>Song 2</span>
-      <button onclick="playSong('Bus1nezz biz')">Play</button>
+      <button onclick="playSong('song2')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
     <div class="music-item">
       <span>Song 3</span>
-      <button onclick="playSong('CC crimeNET Szene Track 2015 HQ')">Play</button>
+      <button onclick="playSong('song3')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
     <div class="music-item">
       <span>Song 4</span>
-      <button onclick="playSong('Bratee ein Tabak Pape Kiffer')">Play</button>
+      <button onclick="playSong('song4')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
     <div class="music-item">
       <span>Song 5</span>
-      <button onclick="playSong('Bob Marley Buffalo soldier')">Play</button>
+      <button onclick="playSong('song5')">Play</button>
       <button onclick="pauseSong()">Pause</button>
     </div>
   </div>
@@ -518,11 +521,11 @@
     let soundEnabled = true;
     let currentAudio = null;
     const songs = {
-      C H O CNWfeat CNW 16 bars: new Audio('https://dl.dropboxusercontent.com/scl/fi/y9firxxgd2eqzb1i4rq5x/C-H-O-CNWfeat-CNW-16-bars.mp3?rlkey=3qtad6n3jk116e9dc6t0giu4d&st=q2zfoko1&dl=0'),
-      Bus1nezz biz: new Audio('https://dl.dropboxusercontent.com/scl/fi/1io0txhr39zlgbocx65lt/Bus1nezz-biz.mp3?rlkey=jcsg4wxf4euzg65rgzw0urd41&st=cfc8sl92&dl=0'),
-      CC crimeNET Szene Track 2015 HQ: new Audio('https://dl.dropboxusercontent.com/scl/fi/n96l7vgtde12s60168hf3/CC-crimeNET-Szene-Track-2015-HQ-1.mp3?rlkey=2hgpku4i44f7bfp04xr9sgjn1&st=v4lqagop&dl=0'),
-      Bratee ein Tabak Pape Kiffer: new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=4i56uw9a&dl=0'),
-      Bob Marley Buffalo soldier: new Audio('https://dl.dropboxusercontent.com/scl/fi/iv1rjs6mqk2qvhk8d9d30/Bob-Marley-Buffalo-soldier.mp3?rlkey=4eucz565t13prewvr3wcku1o4&st=3vfyi1gt&dl=0')
+      song1: new Audio('https://dl.dropboxusercontent.com/scl/fi/y9firxxgd2eqzb1i4rq5x/C-H-O-CNWfeat-CNW-16-bars.mp3?rlkey=3qtad6n3jk116e9dc6t0giu4d&st=q2zfoko1&dl=0'),
+      song2: new Audio('https://dl.dropboxusercontent.com/scl/fi/1io0txhr39zlgbocx65lt/Bus1nezz-biz.mp3?rlkey=jcsg4wxf4euzg65rgzw0urd41&st=cfc8sl92&dl=0'),
+      song3: new Audio('https://dl.dropboxusercontent.com/scl/fi/n96l7vgtde12s60168hf3/CC-crimeNET-Szene-Track-2015-HQ-1.mp3?rlkey=2hgpku4i44f7bfp04xr9sgjn1&st=v4lqagop&dl=0'),
+      song4: new Audio('https://dl.dropboxusercontent.com/scl/fi/hyju8t3at71wdgk88x8gi/Bratee-ein-Tabak-Pape-Kiffer.mp3?rlkey=f62mm3zj5y26ho7gvhk1emx5l&st=4i56uw9a&dl=0'),
+      song5: new Audio('https://dl.dropboxusercontent.com/scl/fi/iv1rjs6mqk2qvhk8d9d30/Bob-Marley-Buffalo-soldier.mp3?rlkey=4eucz565t13prewvr3wcku1o4&st=3vfyi1gt&dl=0')
     };
 
     // Ensure all Audio elements can play on mobile by enabling touch start interaction
@@ -869,7 +872,16 @@
       }
     }
 
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('playSoundButton').innerText = soundEnabled ? 'Sound Ausschalten' : 'Sound Einschalten';
+      if (!soundEnabled && currentAudio) {
+        currentAudio.pause();
+      }
+    }
+
     updateUI();
   </script>
 </body>
 </html>
+
