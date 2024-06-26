@@ -455,7 +455,7 @@
       display: none;
     }
 
-    #introVideo {
+    #introGif {
       width: 100%;
       height: auto;
     }
@@ -464,7 +464,7 @@
 </head>
 <body>
   <div id="videoContainer">
-    <video id="introVideo" src="https://dl.dropboxusercontent.com/scl/fi/uenpo4r1b4ljyl07eukna/Design-ohne-Titel.mp4?rlkey=6fv855ixz0hw6b6wgi4bpjtgt&st=7gwwe20i&dl=0" autoplay muted></video>
+    <img id="introGif" src="https://dl.dropboxusercontent.com/scl/fi/xjjjijm63iplskr832z66/download.gif?rlkey=bewazz8ikkm0k6k5dz1guekav&st=w5o1tts4&dl=0.gif" alt="Intro GIF">
   </div>
   
   <div id="gameContainer">
@@ -537,7 +537,6 @@
   </div>
 
   <script>
-    // Dein bestehender JavaScript-Code
     Telegram.WebApp.ready();
     const tg = window.Telegram.WebApp;
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Unknown User';
@@ -636,12 +635,11 @@
       populateShop();
       checkDailyReward();
 
-      // Video-Event-Listener hinzufügen
-      const video = document.getElementById('introVideo');
-      video.onended = () => {
+      // Event-Listener für das Ende des GIFs hinzufügen (wenn gewünscht)
+      setTimeout(() => {
         document.getElementById('videoContainer').style.display = 'none';
         document.getElementById('gameContainer').style.display = 'block';
-      };
+      }, 5000); // Wartezeit in Millisekunden, hier 5 Sekunden
     };
 
     document.getElementById('button').addEventListener('mousedown', handleButtonPress);
@@ -921,5 +919,6 @@
   </script>
 </body>
 </html>
+
 
 
