@@ -5,28 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
     @keyframes coinAnimation {
-      0% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-100px) scale(0.5);
-      }
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-100px) scale(0.5); }
     }
-
     @keyframes levelUpAnimation {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.2);
-      }
-      100% {
-        transform: scale(1);
-      }
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
-
     body {
       background-image: url('https://cdn.wallpapersafari.com/79/31/E547v1.jpg');
       background-size: cover;
@@ -44,421 +30,52 @@
       justify-content: center;
       height: 100vh;
     }
-
-    #ui {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      padding: 2vw;
-      box-sizing: border-box;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 2;
-      pointer-events: none; /* Ensure the UI doesn't block clicks */
-    }
-
-    .ui-element {
-      background-color: rgba(255, 255, 255, 0.5);
-      border-radius: 1vw;
-      padding: 1vw 2vw;
-      font-size: 3.5vw;
-      font-weight: bold;
-      color: black;
-      display: inline-flex;
-      align-items: center;
-      pointer-events: auto; /* Ensure the UI elements are clickable */
-    }
-
-    .ui-element img {
-      width: 2.5vw;
-      height: 2.5vw;
-      margin-left: 1vw;
-    }
-
-    #score {
-      font-size: 6vw;
-      font-weight: bold;
-      color: white;
-      margin-top: 25vh;
-      background-color: rgba(0, 0, 0, 0.5);
-      border-radius: 1vw;
-      padding: 1vw 2vw;
-      display: inline-block;
-    }
-
-    #button {
-      width: 50vw;
-      height: 50vw;
-      background-color: rgba(0, 0, 255, 0.7);
-      border-radius: 50%;
-      user-select: none;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 2vw auto;
-      transition: transform 0.1s;
-      pointer-events: auto; /* Ensure the button is clickable */
-    }
-
-    #button img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-
-    #button span {
-      position: absolute;
-      font-size: 8vw;
-      font-weight: bold;
-      color: rgb(24, 21, 21);
-      z-index: 1;
-    }
-
-    #button:active {
-      transform: scale(0.95);
-    }
-
-    #coin-animation {
-      position: absolute;
-      width: 10vw;
-      height: 10vw;
-      background-image: url('https://i.postimg.cc/JhKtFTn1/IMG-1271.png');
-      background-size: contain;
-      animation: coinAnimation 1s ease-out;
-      pointer-events: none;
-      display: none;
-    }
-
-    #playSoundButton, #leaderboardButton, #saveButton, #inviteFriendButton, #musicButton {
-      background-color: rgba(255, 255, 255, 0.5);
-      border: none;
-      border-radius: 1vw;
-      padding: 1vw 2vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-      margin: 1vw;
-    }
-
-    #playSoundButton {
-      position: absolute;
-      bottom: 2vw;
-      right: 2vw;
-    }
-
-    #leaderboardButton {
-      position: absolute;
-      bottom: 10vw;
-      right: 2vw;
-    }
-
-    #saveButton, #inviteFriendButton, #musicButton {
-      position: absolute;
-      bottom: 18vw;
-      right: 2vw;
-    }
-
-    #inviteFriendButton {
-      bottom: 26vw;
-    }
-
-    #musicButton {
-      bottom: 34vw;
-    }
-
-    #menuButton {
-      position: absolute;
-      top: 12vw;
-      left: 2vw;
-      background-color: rgba(255, 255, 255, 0.5);
-      border: none;
-      border-radius: 1vw;
-      padding: 1vw 2vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-      z-index: 2;
-    }
-
-    #coins {
-      position: absolute;
-      top: 2vw;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    #activeUsers {
-      position: absolute;
-      top: 2vw;
-      right: 2vw;
-      background-color: rgba(255, 255, 255, 0.5);
-      border-radius: 1vw;
-      padding: 1vw 2vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: black;
-    }
-
-    #sideMenu {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: 300px;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.9);
-      box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-      transition: left 0.3s;
-      display: flex;
-      flex-direction: column;
-      padding-top: 5vw;
-      z-index: 3;
-    }
-
-    #sideMenu a {
-      padding: 1.5vw;
-      text-align: center;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: black;
-      text-decoration: none;
-      margin-bottom: 1vw;
-    }
-
-    #sideMenu a:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-    }
-
-    #sideMenuClose {
-      position: absolute;
-      top: 1vw;
-      right: 1vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-    }
-
-    #leaderboardModal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80vw;
-      height: 80vh;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 1vw;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      overflow: auto;
-      padding: 2vw;
-      box-sizing: border-box;
-      z-index: 4;
-    }
-
-    #leaderboardModal h2 {
-      text-align: center;
-      font-size: 3.5vw;
-      margin-bottom: 2vw;
-    }
-
-    #leaderboardModal ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    #leaderboardModal li {
-      font-size: 2.5vw;
-      padding: 1vw 0;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-
-    #leaderboardModalClose {
-      position: absolute;
-      top: 1vw;
-      right: 1vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-    }
-
-    #shop {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: 300px;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.9);
-      box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-      transition: left 0.3s;
-      display: flex;
-      flex-direction: column;
-      padding-top: 5vw;
-      z-index: 3;
-    }
-
-    #shop h2 {
-      text-align: center;
-      font-size: 3.5vw;
-      margin-bottom: 2vw;
-    }
-
-    #shop ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    #shop li {
-      font-size: 2.5vw;
-      padding: 1vw 0;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    #shop button {
-      background-color: rgba(0, 255, 0, 0.7);
-      border: none;
-      border-radius: 1vw;
-      padding: 1vw 2vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      margin: 1vw auto;
-      display: block;
-      transition: background-color 0.3s;
-    }
-
-    #shop button:hover {
-      background-color: rgba(0, 200, 0, 0.7);
-    }
-
-    #shopClose {
-      position: absolute;
-      top: 1vw;
-      right: 1vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-    }
-
-    #dailyReward {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 1vw;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      width: 60vw;
-      padding: 2vw;
-      text-align: center;
-      z-index: 5;
-      display: none;
-    }
-
-    #dailyReward button {
-      background-color: rgba(0, 255, 0, 0.7);
-      border: none;
-      border-radius: 1vw;
-      padding: 1vw 2vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      margin-top: 2vw;
-      transition: background-color 0.3s;
-    }
-
-    #dailyReward button:hover {
-      background-color: rgba(0, 200, 0, 0.7);
-    }
-
-    #musicMenu {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80vw;
-      height: 80vh;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 1vw;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      overflow: auto;
-      padding: 2vw;
-      box-sizing: border-box;
-      z-index: 6;
-    }
-
-    #musicMenu h2 {
-      text-align: center;
-      font-size: 3.5vw;
-      margin-bottom: 2vw;
-    }
-
-    #musicMenu .music-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 2.5vw;
-      padding: 1vw 0;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-
-    #musicMenu button {
-      background-color: rgba(0, 255, 0, 0.7);
-      border: none;
-      border-radius: 1vw;
-      padding: 1vw 2vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      margin-left: 1vw;
-      transition: background-color 0.3s;
-    }
-
-    #musicMenu button:hover {
-      background-color: rgba(0, 200, 0, 0.7);
-    }
-
-    #musicMenuClose {
-      position: absolute;
-      top: 1vw;
-      right: 1vw;
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-    }
-
-    #videoContainer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    #gameContainer {
-      display: none;
-    }
-
-    #introGif {
-      width: 100%;
-      height: auto;
-    }
+    #ui { width: 100%; display: flex; justify-content: space-between; padding: 2vw; box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 2; pointer-events: none; }
+    .ui-element { background-color: rgba(255, 255, 255, 0.5); border-radius: 1vw; padding: 1vw 2vw; font-size: 3.5vw; font-weight: bold; color: black; display: inline-flex; align-items: center; pointer-events: auto; }
+    .ui-element img { width: 2.5vw; height: 2.5vw; margin-left: 1vw; }
+    #score { font-size: 6vw; font-weight: bold; color: white; margin-top: 25vh; background-color: rgba(0, 0, 0, 0.5); border-radius: 1vw; padding: 1vw 2vw; display: inline-block; }
+    #button { width: 50vw; height: 50vw; background-color: rgba(0, 0, 255, 0.7); border-radius: 50%; user-select: none; position: relative; display: flex; align-items: center; justify-content: center; margin: 2vw auto; transition: transform 0.1s; pointer-events: auto; }
+    #button img { width: 100%; height: 100%; border-radius: 50%; }
+    #button span { position: absolute; font-size: 8vw; font-weight: bold; color: rgb(24, 21, 21); z-index: 1; }
+    #button:active { transform: scale(0.95); }
+    #coin-animation { position: absolute; width: 10vw; height: 10vw; background-image: url('https://i.postimg.cc/JhKtFTn1/IMG-1271.png'); background-size: contain; animation: coinAnimation 1s ease-out; pointer-events: none; display: none; }
+    #playSoundButton, #leaderboardButton, #saveButton, #inviteFriendButton, #musicButton { background-color: rgba(255, 255, 255, 0.5); border: none; border-radius: 1vw; padding: 1vw 2vw; font-size: 2.5vw; font-weight: bold; color: black; cursor: pointer; margin: 1vw; }
+    #playSoundButton { position: absolute; bottom: 2vw; right: 2vw; }
+    #leaderboardButton { position: absolute; bottom: 10vw; right: 2vw; }
+    #saveButton { position: absolute; bottom: 18vw; right: 2vw; }
+    #inviteFriendButton { position: absolute; bottom: 26vw; right: 2vw; }
+    #musicButton { position: absolute; bottom: 34vw; right: 2vw; }
+    #menuButton { position: absolute; top: 12vw; left: 2vw; background-color: rgba(255, 255, 255, 0.5); border: none; border-radius: 1vw; padding: 1vw 2vw; font-size: 2.5vw; font-weight: bold; color: black; cursor: pointer; z-index: 2; }
+    #coins { position: absolute; top: 2vw; left: 50%; transform: translateX(-50%); }
+    #activeUsers { position: absolute; top: 2vw; right: 2vw; background-color: rgba(255, 255, 255, 0.5); border-radius: 1vw; padding: 1vw 2vw; font-size: 2.5vw; font-weight: bold; color: black; }
+    #sideMenu { position: fixed; top: 0; left: -100%; width: 300px; height: 100%; background-color: rgba(255, 255, 255, 0.9); box-shadow: 2px 0 5px rgba(0,0,0,0.5); transition: left 0.3s; display: flex; flex-direction: column; padding-top: 5vw; z-index: 3; }
+    #sideMenu a { padding: 1.5vw; text-align: center; font-size: 2.5vw; font-weight: bold; color: black; text-decoration: none; margin-bottom: 1vw; }
+    #sideMenu a:hover { background-color: rgba(0, 0, 0, 0.1); }
+    #sideMenuClose { position: absolute; top: 1vw; right: 1vw; font-size: 2.5vw; font-weight: bold; color: black; cursor: pointer; }
+    #leaderboardModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80vw; height: 80vh; background-color: rgba(255, 255, 255, 0.9); border-radius: 1vw; box-shadow: 0 0 10px rgba(0,0,0,0.5); overflow: auto; padding: 2vw; box-sizing: border-box; z-index: 4; }
+    #leaderboardModal h2 { text-align: center; font-size: 3.5vw; margin-bottom: 2vw; }
+    #leaderboardModal ul { list-style: none; padding: 0; }
+    #leaderboardModal li { font-size: 2.5vw; padding: 1vw 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+    #leaderboardModalClose { position: absolute; top: 1vw; right: 1vw; font-size: 2.5vw; font-weight: bold; color: black; cursor: pointer; }
+    #shop { position: fixed; top: 0; left: -100%; width: 300px; height: 100%; background-color: rgba(255, 255, 255, 0.9); box-shadow: 2px 0 5px rgba(0,0,0,0.5); transition: left 0.3s; display: flex; flex-direction: column; padding-top: 5vw; z-index: 3; }
+    #shop h2 { text-align: center; font-size: 3.5vw; margin-bottom: 2vw; }
+    #shop ul { list-style: none; padding: 0; }
+    #shop li { font-size: 2.5vw; padding: 1vw 0; border-bottom: 1px solid rgba(0,0,0,0.1); text-align: center; }
+    #shop button { background-color: rgba(0, 255, 0, 0.7); border: none; border-radius: 1vw; padding: 1vw 2vw; font-size: 2.5vw; font-weight: bold; color: white; cursor: pointer; margin: 1vw auto; display: block; transition: background-color 0.3s; }
+    #shop button:hover { background-color: rgba(0, 200, 0, 0.7); }
+    #shopClose { position: absolute; top: 1vw; right: 1vw; font-size: 2.5vw; font-weight: bold; color: black; cursor: pointer; }
+    #dailyReward { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(255, 255, 255, 0.9); border-radius: 1vw; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); width: 60vw; padding: 2vw; text-align: center; z-index: 5; display: none; }
+    #dailyReward button { background-color: rgba(0, 255, 0, 0.7); border: none; border-radius: 1vw; padding: 1vw 2vw; font-size: 2.5vw; font-weight: bold; color: white; cursor: pointer; margin-top: 2vw; transition: background-color 0.3s; }
+    #dailyReward button:hover { background-color: rgba(0, 200, 0, 0.7); }
+    #musicMenu { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80vw; height: 80vh; background-color: rgba(255, 255, 255, 0.9); border-radius: 1vw; box-shadow: 0 0 10px rgba(0,0,0,0.5); overflow: auto; padding: 2vw; box-sizing: border-box; z-index: 6; }
+    #musicMenu h2 { text-align: center; font-size: 3.5vw; margin-bottom: 2vw; }
+    #musicMenu .music-item { display: flex; justify-content: space-between; align-items: center; font-size: 2.5vw; padding: 1vw 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+    #musicMenu button { background-color: rgba(0, 255, 0, 0.7); border: none; border-radius: 1vw; padding: 1vw 2vw; font-size: 2.5vw; font-weight: bold; color: white; cursor: pointer; margin-left: 1vw; transition: background-color 0.3s; }
+    #musicMenu button:hover { background-color: rgba(0, 200, 0, 0.7); }
+    #musicMenuClose { position: absolute; top: 1vw; right: 1vw; font-size: 2.5vw; font-weight: bold; color: black; cursor: pointer; }
+    #videoContainer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    #gameContainer { display: none; }
+    #introGif { width: 100%; height: auto; }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -466,7 +83,6 @@
   <div id="videoContainer">
     <img id="introGif" src="https://dl.dropboxusercontent.com/scl/fi/9c6t7eblcxa6copiuxj4u/download-3.gif?rlkey=ar7507bzf3k5t5t7m8ubi07ij&st=p3g6mw4r&dl=0.gif" alt="Intro GIF">
   </div>
-  
   <div id="gameContainer">
     <div id="ui">
       <div class="ui-element" id="level">Level: 1</div>
@@ -535,7 +151,6 @@
       </div>
     </div>
   </div>
-
   <script>
     Telegram.WebApp.ready();
     const tg = window.Telegram.WebApp;
@@ -545,10 +160,10 @@
     let counter = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
     let coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
     let level = localStorage.getItem('level') ? parseInt(localStorage.getItem('level')) : 1;
-    let soundPlaying = false;
-    let soundStarted = false;
     let soundEnabled = true;
     let currentAudio = null;
+    const loopAudio = new Audio('https://example.com/loop-audio.mp3'); // replace with actual URL
+    loopAudio.loop = true;
     const songs = {
       song1: new Audio('https://dl.dropboxusercontent.com/scl/fi/y9firxxgd2eqzb1i4rq5x/C-H-O-CNWfeat-CNW-16-bars.mp3?rlkey=3qtad6n3jk116e9dc6t0giu4d&st=q2zfoko1&dl=0'),
       song2: new Audio('https://dl.dropboxusercontent.com/scl/fi/1io0txhr39zlgbocx65lt/Bus1nezz-biz.mp3?rlkey=jcsg4wxf4euzg65rgzw0urd41&st=cfc8sl92&dl=0'),
@@ -559,16 +174,15 @@
 
     // Ensure all Audio elements can play on mobile by enabling touch start interaction
     document.body.addEventListener('touchstart', function() {
-      Object.values(songs).forEach(audio => {
-        audio.load();
-      });
+      Object.values(songs).forEach(audio => audio.load());
+      loopAudio.load();
     }, { once: true });
 
-    let products = JSON.parse(localStorage.getItem('products')) || [
-      {level: 1, cost: 100, increment: 2, autoClick: false},
-      {level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null, bonus: 'Doppelte Münzen für 10 Sekunden'},
-      {level: 1, cost: 300, increment: 0, autoClick: false, bonus: 'Erhalte zufällige Münzgewinne'},
-      {level: 1, cost: 400, increment: 0, autoClick: false, bonus: 'Reduziert Upgrade-Kosten um 10%'}
+    const products = JSON.parse(localStorage.getItem('products')) || [
+      { level: 1, cost: 100, increment: 2, autoClick: false },
+      { level: 1, cost: 200, increment: 0, autoClick: true, interval: 3000, autoClickId: null, bonus: 'Doppelte Münzen für 10 Sekunden' },
+      { level: 1, cost: 300, increment: 0, autoClick: false, bonus: 'Erhalte zufällige Münzgewinne' },
+      { level: 1, cost: 400, increment: 0, autoClick: false, bonus: 'Reduziert Upgrade-Kosten um 10%' }
     ];
 
     const levelThresholds = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200];
@@ -582,45 +196,25 @@
       'https://www.cannabisenligne.net/wp-content/uploads/2018/04/photo_2020-09-29_10-17-02-886x1024.jpg',
       'https://i0.wp.com/orderweedpattaya.com/wp-content/uploads/2023/05/IMG-20230505-WA0007.jpg?fit=1536%2C2048&ssl=1',
       'https://i.pinimg.com/736x/67/88/94/678894fa02eea0d82490d9467fc1992c--cannabis.jpg',
-      'https://i.redd.it/4rb1b79f6jfb1.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg',
-      'https://example.com/background9.jpg'
+      'https://i.redd.it/4rb1b79f6jfb1.jpg'
     ];
 
     const levelUpMessages = [
-      '',
-      'Level Up! Du bist jetzt im Level: Standart Kiffer',
-      'Level Up! Du bist jetzt im Level: 🇩🇪 Mousse Lieferant',
-      'Level Up! Du bist jetzt im Level: Mousse Anführer',
-      'Level Up! Du bist jetzt im Level: Dry Raucher',
-      'Level Up! Du bist jetzt im Level: Mousse Händler',
-      'Level Up! Du bist jetzt im Level: Mousse King',
-      'Level Up! Du bist jetzt im Level: Mousse Schmecker',
-      'Level Up! Du bist jetzt im Level: Mousse Clan',
-      'Level Up! Du bist jetzt im Level: Mousse Endgegner',
-      'Level Up! Du bist jetzt im Level: Mousse Imperator',
-      'Level Up! Du bist jetzt im Level: Ecstasy auf Kombi',
-      'Level Up! Du bist jetzt im Level: 🇩🇪 Ecstasy Lieferant',
-      'Level Up! Du bist jetzt im Level: Ecstasy Chef',
-      'Level Up! Du bist jetzt im Level: Dry Konsument',
-      'Level Up! Du bist jetzt im Level: Ecstasy Händler',
-      'Level Up! Du bist jetzt im Level: Ecstasy König',
-      'Level Up! Du bist jetzt im Level: Ecstasy Experte',
-      'Level Up! Du bist jetzt im Level: Ecstasy Mannschaft',
-      'Level Up! Du bist jetzt im Level: Ecstasy Champion',
-      'Level Up! Du bist jetzt im Level: Ecstasy Oberhaupt'
+      '', 'Level Up! Du bist jetzt im Level: Standart Kiffer', 'Level Up! Du bist jetzt im Level: 🇩🇪 Mousse Lieferant',
+      'Level Up! Du bist jetzt im Level: Mousse Anführer', 'Level Up! Du bist jetzt im Level: Dry Raucher',
+      'Level Up! Du bist jetzt im Level: Mousse Händler', 'Level Up! Du bist jetzt im Level: Mousse King',
+      'Level Up! Du bist jetzt im Level: Mousse Schmecker', 'Level Up! Du bist jetzt im Level: Mousse Clan',
+      'Level Up! Du bist jetzt im Level: Mousse Endgegner', 'Level Up! Du bist jetzt im Level: Mousse Imperator',
+      'Level Up! Du bist jetzt im Level: Ecstasy auf Kombi', 'Level Up! Du bist jetzt im Level: 🇩🇪 Ecstasy Lieferant',
+      'Level Up! Du bist jetzt im Level: Ecstasy Chef', 'Level Up! Du bist jetzt im Level: Dry Konsument',
+      'Level Up! Du bist jetzt im Level: Ecstasy Händler', 'Level Up! Du bist jetzt im Level: Ecstasy König',
+      'Level Up! Du bist jetzt im Level: Ecstasy Experte', 'Level Up! Du bist jetzt im Level: Ecstasy Mannschaft',
+      'Level Up! Du bist jetzt im Level: Ecstasy Champion', 'Level Up! Du bist jetzt im Level: Ecstasy Oberhaupt'
     ];
 
     window.onload = function() {
-      products.forEach((product, index) => {
+      loopAudio.play().catch(error => console.error('Error playing loop audio:', error));
+      products.forEach(product => {
         if (product.autoClick && !product.autoClickId) {
           product.autoClickId = setInterval(() => {
             counter += product.increment;
@@ -634,12 +228,10 @@
       updateUI();
       populateShop();
       checkDailyReward();
-
-      // Event-Listener für das Ende des GIFs hinzufügen (wenn gewünscht)
       setTimeout(() => {
         document.getElementById('videoContainer').style.display = 'none';
         document.getElementById('gameContainer').style.display = 'block';
-      }, 5000); // Wartezeit in Millisekunden, hier 5 Sekunden
+      }, 5000); // 5 seconds delay
     };
 
     document.getElementById('button').addEventListener('mousedown', handleButtonPress);
@@ -663,11 +255,7 @@
     }
 
     document.getElementById('menuButton').onclick = () => {
-      if (document.getElementById('sideMenu').style.left === '0px') {
-        document.getElementById('sideMenu').style.left = '-100%';
-      } else {
-        document.getElementById('sideMenu').style.left = '0px';
-      }
+      document.getElementById('sideMenu').style.left = document.getElementById('sideMenu').style.left === '0px' ? '-100%' : '0px';
     };
 
     document.getElementById('sideMenuClose').onclick = () => {
@@ -675,11 +263,7 @@
     };
 
     document.getElementById('shopButton').onclick = () => {
-      if (document.getElementById('shop').style.left === '0px') {
-        document.getElementById('shop').style.left = '-100%';
-      } else {
-        document.getElementById('shop').style.left = '0px';
-      }
+      document.getElementById('shop').style.left = document.getElementById('shop').style.left === '0px' ? '-100%' : '0px';
     };
 
     document.getElementById('shopClose').onclick = () => {
@@ -725,9 +309,7 @@
       clone.style.top = `${y - 20}px`;
       clone.style.display = 'block';
       document.body.appendChild(clone);
-      clone.addEventListener('animationend', () => {
-        clone.remove();
-      });
+      clone.addEventListener('animationend', () => clone.remove());
     }
 
     document.getElementById('button').addEventListener('animationend', () => {
@@ -735,20 +317,16 @@
     });
 
     function toggleLeaderboard() {
-      if (document.getElementById('leaderboardModal').style.display === 'none' || document.getElementById('leaderboardModal').style.display === '') {
-        populateLeaderboard();
-        document.getElementById('leaderboardModal').style.display = 'block';
-      } else {
-        document.getElementById('leaderboardModal').style.display = 'none';
-      }
+      const leaderboardModal = document.getElementById('leaderboardModal');
+      leaderboardModal.style.display = leaderboardModal.style.display === 'none' || leaderboardModal.style.display === '' ? 'block' : 'none';
+      if (leaderboardModal.style.display === 'block') populateLeaderboard();
     }
 
     function populateLeaderboard() {
       const leaderboardList = document.getElementById('leaderboardList');
       leaderboardList.innerHTML = '';
-      let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-      leaderboard.sort((a, b) => b.coins - a.coins);
-      leaderboard.slice(0, 50).forEach((player, index) => {
+      const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+      leaderboard.sort((a, b) => b.coins - a.coins).slice(0, 50).forEach((player, index) => {
         const li = document.createElement('li');
         li.innerText = `Platz ${index + 1}: @${player.username} Anzahl der Coins: ${player.coins}`;
         leaderboardList.appendChild(li);
@@ -764,7 +342,6 @@
           <strong>La Mousse ${index + 1}</strong> - Level: ${product.level}, Kosten: ${product.cost} Coins, <br> Erhöhung: ${product.increment}, <br> Bonus: ${product.bonus || ''}
           <button id="buyProduct${index + 1}">Kaufen für ${product.cost} Coins</button>`;
         shopList.appendChild(li);
-
         document.getElementById(`buyProduct${index + 1}`).onclick = () => {
           if (coins >= product.cost) {
             coins -= product.cost;
@@ -779,15 +356,11 @@
                 updateUI();
               }, product.interval);
             }
-            if (product.bonus) {
-              applyProductBonus(product);
-            }
+            if (product.bonus) applyProductBonus(product);
             saveGame();
             updateUI();
             populateShop();
-          } else {
-            alert('Nicht genug Coins!');
-          }
+          } else alert('Nicht genug Coins!');
         };
       });
     }
@@ -816,7 +389,7 @@
       const link = `https://t.me/DoxisGameBot/DrugzClicker?ref=${username}`;
       navigator.clipboard.writeText(link).then(() => {
         alert('Einladungslink wurde kopiert! Schick ihn in Gruppen, damit du durch die Einladungen viele La Mousse Coins erhälst');
-      }, (err) => {
+      }).catch(err => {
         console.error('Fehler beim Kopieren des Einladungslinks: ', err);
       });
     }
@@ -848,9 +421,7 @@
 
     function awardReferralBonus(referrerUsername) {
       let referrers = JSON.parse(localStorage.getItem('referrers')) || {};
-      if (!referrers[referrerUsername]) {
-        referrers[referrerUsername] = 0;
-      }
+      if (!referrers[referrerUsername]) referrers[referrerUsername] = 0;
       referrers[referrerUsername] += 200;
       localStorage.setItem('referrers', JSON.stringify(referrers));
       if (referrerUsername === username) {
@@ -865,7 +436,6 @@
       const lastClaimed = localStorage.getItem('lastClaimed');
       const now = new Date().getTime();
       const oneDay = 24 * 60 * 60 * 1000;
-
       if (!lastClaimed || now - lastClaimed > oneDay) {
         document.getElementById('dailyReward').style.display = 'block';
       }
@@ -885,33 +455,32 @@
 
     function toggleMusicMenu() {
       const musicMenu = document.getElementById('musicMenu');
-      musicMenu.style.display = (musicMenu.style.display === 'none' || musicMenu.style.display === '') ? 'block' : 'none';
+      musicMenu.style.display = musicMenu.style.display === 'none' || musicMenu.style.display === '' ? 'block' : 'none';
     }
 
     function playSong(songId) {
       const song = songs[songId];
       if (song) {
-        if (currentAudio && !currentAudio.paused) {
-          currentAudio.pause();
-        }
+        loopAudio.pause();
+        if (currentAudio && !currentAudio.paused) currentAudio.pause();
         currentAudio = song;
         currentAudio.play().catch(error => console.error('Audio playback failed:', error, song.src));
-      } else {
-        console.error('Song not found:', songId);
-      }
+      } else console.error('Song not found:', songId);
     }
 
     function pauseSong() {
-      if (currentAudio) {
-        currentAudio.pause();
-      }
+      if (currentAudio) currentAudio.pause();
     }
 
     function toggleSound() {
       soundEnabled = !soundEnabled;
       document.getElementById('playSoundButton').innerText = soundEnabled ? 'Sound Ausschalten' : 'Sound Einschalten';
-      if (!soundEnabled && currentAudio) {
-        currentAudio.pause();
+      if (!soundEnabled) {
+        if (currentAudio) currentAudio.pause();
+        loopAudio.pause();
+      } else {
+        if (currentAudio) currentAudio.play();
+        else loopAudio.play().catch(error => console.error('Error playing loop audio:', error));
       }
     }
 
@@ -919,6 +488,7 @@
   </script>
 </body>
 </html>
+
 
 
 
